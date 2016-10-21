@@ -66,7 +66,7 @@ function source() {
     collapseWhitespace: true,
     removeComments: true,
     minifyCSS: true,
-    uglifyJS: true
+    uglifyJS: false
   }))).
   pipe(gulpif('**/*.js', babel())).
   pipe(gulpif('**/*.js', uglify())).
@@ -84,7 +84,7 @@ function dependencies() {
     collapseWhitespace: true,
     removeComments: true,
     // minifyCSS: true,
-    uglifyJS: true
+    uglifyJS: false
   }))).
   pipe(gulpif('**/*.js', babel())).
   pipe(gulpif('**/*.js', uglify())).
