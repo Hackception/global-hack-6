@@ -50,7 +50,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       // Setup Polymer options
       window.Polymer = {
         dom: 'shadow',
-        lazyRegister: true
+        lazyRegister: 'max',
+        useNativeCSSProperties: true
       };
 
       // Load webcomponentsjs polyfill if browser does not support native Web Components
@@ -92,7 +93,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </script>
 
-    <link rel="import" href="/src/my-app.html">
+
+    <script src="https://www.gstatic.com/firebasejs/3.5.1/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyB31LHiV6XdxiAEl2UuFwgdbS5CQ_nIfiQ",
+        authDomain: "global-hack-6.firebaseapp.com",
+        databaseURL: "https://global-hack-6.firebaseio.com",
+        storageBucket: "global-hack-6.appspot.com",
+        messagingSenderId: "1020118093880"
+      };
+      firebase.initializeApp(config);
+    </script>
+
+    <link rel="import" async href="/src/my-app.html">
 
     <style>
       body {
@@ -105,7 +120,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
   </head>
   <body>
-    <my-app></my-app>
-    <!-- Built with love using Polymer Starter Kit -->
+    <my-app>
+
+    </my-app>
   </body>
 </html>
