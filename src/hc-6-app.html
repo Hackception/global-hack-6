@@ -19,6 +19,7 @@
 <link rel=import href=../bower_components/paper-button/paper-button.html>
 <link rel=import href=../bower_components/paper-dialog/paper-dialog.html>
 <link rel=import href=../bower_components/paper-input/paper-input.html>
+<link rel=import href=../bower_components/neon-animation/neon-animation.html>
 
 <link rel=import href=app-theme.html>
 
@@ -101,11 +102,20 @@
         padding-left: 32px;
       }
 
-      .login {
+      app-toolbar ~ .login {
         text-align: center;
+      }
+      .login {
         padding: 16px;
       }
       .login paper-button {
+        margin-top: 8px;
+        --paper-button:{
+          background-color: var(--light-primary-color);
+          color: var(--primary-text-color);
+        };
+      }
+      .login paper-button.primary {
         --paper-button:{
           background-color: var(--accent-color);
           color: var(--text-primary-color);
@@ -114,6 +124,7 @@
       [hidden] {
         display: none;
       }
+
     </style>
 
     <!-- <google-analytics-loader
@@ -168,8 +179,8 @@
           <a name=user-lookup href=/user-lookup>User Lookup</a>
         </iron-selector>
         <div class="login">
-          <paper-button hidden$=[[__isLoggedIn]] on-click=login>[[localize('hc-6-app-login')]]</paper-button>
-          <paper-button hidden$=[[!__isLoggedIn]] on-click=logout>[[localize('hc-6-app-logout')]]</paper-button>
+          <paper-button class="primary" hidden$=[[__isLoggedIn]] on-click=login>[[localize('hc-6-app-login')]]</paper-button>
+          <paper-button class="primary" hidden$=[[!__isLoggedIn]] on-click=logout>[[localize('hc-6-app-logout')]]</paper-button>
         </div>
       </app-drawer>
       <!-- Main content -->
@@ -187,20 +198,24 @@
             <div main-title>Homeless Management</div>
 
             <form is="iron-form" id="search"
-              novalidate
+              disable-native-validation-ui
               required
               auto-validate
               on-submit="_submitSearch(event)"
               hidden$="{{__hideSearch}}">
               <paper-input
+                entry-animation="slide-from-left-animation"
+                exit-animation="slide-right-animation"
                 tabindex="0"
                 label="Search..."
                 no-label-float
               ></paper-input>
-              <paper-icon-button
-                icon=search
-                on-blur="_toggleSearch"
-              ></paper-icon-button>
+              <button type="submit">
+                <paper-icon-button
+                  icon=search
+                  on-blur="_toggleSearch"
+                ></paper-icon-button>
+              </button>
             </form>
 
             <paper-icon-button
@@ -233,11 +248,15 @@
       </app-header-layout>
     </app-drawer-layout>
 
-    <paper-dialog id=login-dialog>
+    <paper-dialog id=login-dialog
+      class="login"
+      entry-animation="scale-up-animation"
+      exit-animation="fade-out-animation"
+      with-backdrop>
       <paper-input
         label=[[localize('hc-6-app-email')]]
         value={{_email}}
-        type=username
+        type=email
       ></paper-input>
       <paper-input
         label=[[localize('hc-6-app-password')]]
@@ -245,7 +264,7 @@
         type=password
       ></paper-input>
       <div class="buttons">
-        <paper-button dialog-confirm on-click=_login type=submit>[[localize('hc-6-app-login')]]</paper-button>
+        <paper-button class="primary" dialog-confirm on-click=_login type=submit>[[localize('hc-6-app-login')]]</paper-button>
         <paper-button dialog-dismiss>[[localize('hc-6-app-cancel')]]</paper-button>
       </div>
     </paper-dialog>
