@@ -35,9 +35,11 @@
     "morgan": "^1.7.0",
     "plylog": "^0.4.0",
     "polymer-build": "^0.4.0",
-    "postcss": "^5.2.5"
+    "postcss": "^5.2.5",
+    "twilio": "^2.11.0"
   },
   "dependencies": {
+    "cors": "^2.8.1",
     "firebase": "^3.5.1"
   }
 }
