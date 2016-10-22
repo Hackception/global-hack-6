@@ -13,8 +13,8 @@ var express = require('express'),
   path = require('path'),
   firebase = require('firebase'),
   callResponse = require('./call-response'),
-  callPath = require('./call-path');
-
+  callPath = require('./call-path'),
+  router = require('./router');
 var app = module.exports = express();
 
 /**
@@ -45,17 +45,19 @@ if (env === 'production') {
  * Firebase set up
  */
  firebase.initializeApp({
-   serviceAccount: "global-hack-6-d470454bd9b9.json",
+   serviceAccount: "api/constants/global-hack-6-400ea30c06bf.json",
    databaseURL: "https://global-hack-6.firebaseio.com"
  });
-var db = firebase.database();
+global.db = firebase.database();
 
 /**
  * Routes
  */
 
+app.use('/api', router);
+
 // JSON API
-app.get('*', api.name);
+// app.get('*', api.name);
 app.post('/name', api.post_name);
 app.post('something', function(req, res) {
 

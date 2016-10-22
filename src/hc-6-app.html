@@ -16,6 +16,11 @@
 <link rel=import href=../bower_components/iron-selector/iron-selector.html>
 <link rel=import href=../bower_components/app-localize-behavior/app-localize-behavior.html>
 <link rel=import href=../bower_components/paper-progress/paper-progress.html>
+<<<<<<< HEAD
+=======
+<link rel=import href=../bower_components/paper-button/paper-button.html>
+<link rel=import href=../bower_components/paper-dialog/paper-dialog.html>
+>>>>>>> fc7263a70175cdcd12136d607611d0130c49a757
 <link rel=import href=../bower_components/paper-input/paper-input.html>
 
 <link rel=import href=app-theme.html>
@@ -113,15 +118,12 @@
        database-url="https://global-hack-6.firebaseio.com"
        storage-bucket="global-hack-6.appspot.com"
        messaging-sender-id="1020118093880"
+       name=hc-app
     ></firebase-app>
-    <firebase-auth id="auth"
-      user="{{user}}"
-      online={{_online}}
-      on-status-known-changed="_handleAuthChange"
-      on-error="_handleError"
+    <firebase-auth
+      id=auth
+      app-name=hc-app
     ></firebase-auth>
-
-
 
     <app-location
       route={{route}}
@@ -135,42 +137,30 @@
 
     <app-drawer-layout fullbleed force-narrow>
       <!-- Drawer content -->
-      <app-drawer id="mainMenu"
+      <app-drawer id="mainMenu" opened={{_opened}}
         swipe-open>
+<<<<<<< HEAD
         <div class="userInfo">
           <iron-image class="avatar" alt="User" src="//placehold.it/150x150"></iron-image>
           <div class="name">Stramel</div>
         </div>
+=======
+        <app-toolbar>Menu</app-toolbar>
+        <paper-button hidden$=[[_isLoggedIn]] raised on-click=login>[[localize('hc-6-app-login')]]</paper-button>
+        <paper-button hidden$=[[!_isLoggedIn]] raised on-click=logout>[[localize('hc-6-app-logout')]]</paper-button>
+>>>>>>> fc7263a70175cdcd12136d607611d0130c49a757
         <iron-selector
           selected=[[page]]
           attr-for-selected=name
           class="drawer-list"
           role=navigation
           >
-          <a
-            name=home
-            href=/home
-          >Home</a>
-          <a
-            name=intake
-            href=/intake
-          >Intake</a>
-          <a
-            name=location-lookup
-            href=/location-lookup
-          >Location Lookup</a>
-          <a
-            name=manage
-            href=/manage
-          >Manage</a>
-          <a
-            name=reporting
-            href=/reporting
-          >Reporting</a>
-          <a
-            name=user-lookup
-            href=/user-lookup
-          >User Lookup</a>
+          <a name=home href=/home>Home</a>
+          <a name=intake href=/intake>Intake</a>
+          <a name=location-lookup href=/location-lookup>Location Lookup</a>
+          <a name=manage href=/manage>Manage</a>
+          <a name=reporting href=/reporting>Reporting</a>
+          <a name=user-lookup href=/user-lookup>User Lookup</a>
         </iron-selector>
       </app-drawer>
       <!-- Main content -->
@@ -223,16 +213,33 @@
           fallback-selection=404
           role=main
           >
-          <hc-home name=home></hc-home>
-          <hc-intake name=intake></hc-intake>
-          <hc-location-lookup name=location-lookup></hc-location-lookup>
-          <hc-manage name=manage></hc-manage>
-          <hc-reporting name=reporting></hc-reporting>
-          <hc-user-lookup name=user-lookup></hc-user-lookup>
-          <hc-404 name=404></hc-404>
+          <hc-home name=home language=[[language]]></hc-home>
+          <hc-intake name=intake language=[[language]]></hc-intake>
+          <hc-location-lookup name=location-lookup language=[[language]]></hc-location-lookup>
+          <hc-manage name=manage language=[[language]]></hc-manage>
+          <hc-reporting name=reporting language=[[language]]></hc-reporting>
+          <hc-user-lookup name=user-lookup language=[[language]]></hc-user-lookup>
+          <hc-404 name=404 language=[[language]]></hc-404>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
+
+    <paper-dialog id=login-dialog>
+      <paper-input
+        label=[[localize('hc-6-app-email')]]
+        value={{_email}}
+        type=username
+      ></paper-input>
+      <paper-input
+        label=[[localize('hc-6-app-password')]]
+        value={{_password}}
+        type=password
+      ></paper-input>
+      <div class="buttons">
+        <paper-button dialog-confirm on-click=_login type=submit>[[localize('hc-6-app-login')]]</paper-button>
+        <paper-button dialog-dismiss>[[localize('hc-6-app-cancel')]]</paper-button>
+      </div>
+    </paper-dialog>
   </template>
 
   <script>
@@ -254,6 +261,10 @@
           type: String,
           reflectToAttribute: true
         },
+        _isLoggedIn: {
+          type: Boolean,
+          value: () => Boolean(sessionStorage.user)
+        },
         __hideSearch: {
           type: Boolean,
           value: true
@@ -274,8 +285,23 @@
       attached() {
         this.loadResources(this.resolveUrl('../data/locales.json'));
       },
-
-
+      login() {
+        this._opened = false;
+        this.$['login-dialog'].open();
+      },
+      logout() {
+        this._isLoggedIn = false;
+        delete sessionStorage.user;
+      },
+      _login() {
+        this.$.auth.signInWithEmailAndPassword(this._email, this._password).
+          then(response => {
+            sessionStorage.user = JSON.stringify(response);
+            this._isLoggedIn = true;
+            this._email = '';
+            this._password = '';
+          });
+      },
       // Routing
       _routePageChanged(page) {
         this.page = page || 'home';

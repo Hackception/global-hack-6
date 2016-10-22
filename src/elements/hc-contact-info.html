@@ -33,29 +33,29 @@ contactInfo: {
       if=[[!hideAddress]]
       >
       <paper-input
-        label=[[localize('address.street')]]
-        value={{contactInfo.address.street}}
+        label=[[localize('contact-info-address-street')]]
+        value={{address.street}}
         disabled=[[readOnly]]
         auto-validate
       ></paper-input>
       <paper-input
         value={{address.city}}
-        label=[[localize('contactInfo.address.city')]]
+        label=[[localize('contact-info-address-city')]]
         disabled=[[readOnly]]
         auto-validate
       ></paper-input>
       <paper-input
-        label=[[localize('contactInfo.address.state')]]
+        label=[[localize('contact-info-address-state')]]
         value={{address.state}}
         disabled=[[readOnly]]
         auto-validate
       ></paper-input>
       <gold-zip-input
         auto-validate
-        label=[[localize('contactInfo.address.zip')]]
+        label=[[localize('contact-info-address-zip')]]
         value={{address.zip}}
         disabled=[[readOnly]]
-      ></gold-zin-input>
+      ></gold-zip-input>
     </template>
     <template
       is=dom-if
@@ -63,7 +63,8 @@ contactInfo: {
       >
       <gold-email-input
         auto-validate
-        label=[[localize('contactInfo.email')]]
+        label=[[localize('contact-info-email')]]
+        value={{email}}
       ></gold-email-input>
     </template>
     <template
@@ -74,7 +75,7 @@ contactInfo: {
         value={{fax}}
         phone-number-pattern=XXX-XXX-XXXX
         auto-validate
-        label=[[localize('contactInfo.fax')]]
+        label=[[localize('contact-info-fax')]]
       ></gold-phone-input>
     </template>
     <template
@@ -85,7 +86,7 @@ contactInfo: {
         value={{phoneNumber}}
         phone-number-pattern=XXX-XXX-XXXX
         auto-validate
-        label=[[localize('contactInfo.phoneNumber')]]
+        label=[[localize('contact-info-phone-number')]]
       ></gold-phone-input>
     </template>
   </template>
@@ -99,7 +100,9 @@ contactInfo: {
         address: {
           notify: true,
           type: Object,
-          value: () => ({})
+          value: () => ({
+            zip: ''
+          })
         },
         email: {
           notify: true,
@@ -111,7 +114,7 @@ contactInfo: {
           type: String,
           value: ''
         },
-        hideAddres: {
+        hideAddress: {
           type: Boolean,
           value: false
         },
@@ -136,7 +139,10 @@ contactInfo: {
           type: Boolean,
           value: false
         }
-      }
+      },
+      attached() {
+        this.loadResources(this.resolveUrl('../../data/locales.json'));
+      },
     });
   </script>
 </dom-module>
