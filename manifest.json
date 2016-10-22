@@ -1,10 +1,10 @@
 {
-  "name": "My App",
-  "short_name": "My App",
-  "start_url": "/?homescreen=1",
+  "name": "Homeless Management Information System",
+  "short_name": "HMIS",
+  "start_url": "/",
   "display": "standalone",
-  "theme_color": "#3f51b5",
-  "background_color": "#3f51b5",
+  "theme_color": "#607D8B",
+  "background_color": "#CFD8DC",
   "icons": [
     {
       "src": "images/manifest/icon-192x192.png",
