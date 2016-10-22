@@ -1,0 +1,10 @@
+{
+  "name": "COC Number One",
+  "contactInfo": {
+    "geolocation": "10001110011",
+    "address": "800 Place Ln",
+    "phoneNumber": "8007337333",
+    "email": "test@test.com",
+    "fax": "8008008000"
+  }
+}

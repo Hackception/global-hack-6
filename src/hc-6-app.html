@@ -11,8 +11,14 @@
 <link rel=import href=../bower_components/app-layout/app-toolbar/app-toolbar.html>
 <link rel=import href=../bower_components/paper-icon-button/paper-icon-button.html>
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel=import href=../bower_components/iron-pages/iron-pages.html>
 <link rel=import href=../bower_components/iron-selector/iron-selector.html>
+<link rel=import href=../bower_components/app-localize-behavior/app-localize-behavior.html>
+<link rel=import href=../bower_components/paper-progress/paper-progress.html>
+<link rel=import href=../bower_components/paper-button/paper-button.html>
+<link rel=import href=../bower_components/paper-dialog/paper-dialog.html>
+<link rel=import href=../bower_components/paper-input/paper-input.html>
 
 <link rel=import href=app-theme.html>
 
@@ -27,29 +33,65 @@
         display: block;
       }
       app-header {
-        background-color: var(--default-primary-color);
-        color: var(--text-primary-color);
+        background-color: var(--text-primary-color);
+        color: var(--primary-text-color);
       }
       app-header paper-icon-button {
         --paper-icon-button-ink-color: var(--text-primary-color);
       }
 
-      app-drawer {
-        --app-drawer-content-container: {
-          background-color: var(--primary-background-color);
-        };
+      app-toolbar paper-icon-button {
+        margin-right: 8px;
       }
 
-
-      .drawer-list {
-        margin: 0 20px;
+      .avatar {
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+        display: block;
       }
+      #mainMenu .userInfo:not([hidden]) {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        background-color: var(--dark-primary-color);
+        color: var(--text-primary-color);
+        padding: 16px;
+      }
+      #mainMenu .name {
+        margin-top: 16px;
+        font-size: var(30px);
+        letter-spacing: 1px;
+        font-weight: bold;
+      }
+
+      form#search > * {
+        display: inline-block;
+      }
+
+      paper-icon-button[hidden] {
+        display: none;
+      }
+
+      app-drawer app-toolbar{
+        background-color: var(--default-primary-color);
+        color: var(--text-primary-color);
+      }
+      paper-progress {
+        display: block;
+        width: 100%;
+        --paper-progress-active-color: var(--default-primary-color);
+      }
+
       .drawer-list a {
         display: block;
         padding: 0 16px;
-        line-height: 40px;
+        line-height: 50px;
         text-decoration: none;
         color: var(--primary-text-color);
+        border-bottom: 1px solid var(--divider-color);
       }
       .drawer-list a.iron-selected {
         color: var(--accent-color);
@@ -57,6 +99,20 @@
       }
       .drawer-list a.subroute {
         padding-left: 32px;
+      }
+
+      .login {
+        text-align: center;
+        padding: 16px;
+      }
+      .login paper-button {
+        --paper-button:{
+          background-color: var(--accent-color);
+          color: var(--text-primary-color);
+        };
+      }
+      [hidden] {
+        display: none;
       }
     </style>
 
@@ -73,15 +129,13 @@
        database-url="https://global-hack-6.firebaseio.com"
        storage-bucket="global-hack-6.appspot.com"
        messaging-sender-id="1020118093880"
+       name=hc-app
     ></firebase-app>
-    <firebase-auth id="auth"
-      user="{{user}}"
-      online={{_online}}
-      on-status-known-changed="_handleAuthChange"
-      on-error="_handleError"
+    <firebase-auth
+      id=auth
+      app-name=hc-app
+      signed-in={{_isLoggedIn}}
     ></firebase-auth>
-
-
 
     <app-location
       route={{route}}
@@ -93,41 +147,32 @@
       tail={{subroute}}
     ></app-route>
 
-    <app-drawer-layout fullbleed>
+    <app-drawer-layout fullbleed force-narrow>
       <!-- Drawer content -->
-      <app-drawer>
-        <app-toolbar>Menu</app-toolbar>
+      <app-drawer id="mainMenu" opened={{_opened}}
+        swipe-open>
+        <div class="userInfo" hidden$=[[!_isLoggedIn]]>
+          <iron-image class="avatar" alt="User" src="//placehold.it/150x150"></iron-image>
+          <div class="name">Stramel</div>
+        </div>
+        <app-toolbar hidden$=[[_isLoggedIn]]>Menu</app-toolbar>
         <iron-selector
           selected=[[page]]
           attr-for-selected=name
           class="drawer-list"
           role=navigation
           >
-          <a
-            name=home
-            href=/home
-          >Home</a>
-          <a
-            name=intake
-            href=/intake
-          >Intake</a>
-          <a
-            name=location-lookup
-            href=/location-lookup
-          >Location Lookup</a>
-          <a
-            name=manage
-            href=/manage
-          >Manage</a>
-          <a
-            name=reporting
-            href=/reporting
-          >Reporting</a>
-          <a
-            name=user-lookup
-            href=/user-lookup
-          >User Lookup</a>
+          <a name=home href=/home>Home</a>
+          <a name=intake href=/intake>Intake</a>
+          <a name=location-lookup href=/location-lookup>Location Lookup</a>
+          <a name=manage href=/manage>Manage</a>
+          <a name=reporting href=/reporting>Reporting</a>
+          <a name=user-lookup href=/user-lookup>User Lookup</a>
         </iron-selector>
+        <div class="login">
+          <paper-button hidden$=[[_isLoggedIn]] on-click=login>[[localize('hc-6-app-login')]]</paper-button>
+          <paper-button hidden$=[[!_isLoggedIn]] on-click=logout>[[localize('hc-6-app-logout')]]</paper-button>
+        </div>
       </app-drawer>
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
@@ -141,7 +186,36 @@
               icon=menu
               drawer-toggle
             ></paper-icon-button>
-            <div main-title>Homeless Management Information System</div>
+            <div main-title>Homeless Management</div>
+
+            <form is="iron-form" id="search"
+              novalidate
+              required
+              auto-validate
+              on-submit="_submitSearch(event)"
+              hidden$="{{__hideSearch}}">
+              <paper-input
+                tabindex="0"
+                label="Search..."
+                no-label-float
+              ></paper-input>
+              <paper-icon-button
+                icon=search
+                on-blur="_toggleSearch"
+              ></paper-icon-button>
+            </form>
+
+            <paper-icon-button
+              icon=search
+              hidden$="{{!__hideSearch}}"
+              on-click="_toggleSearch"
+            ></paper-icon-button>
+
+            <paper-progress
+              indeterminate
+              bottom-item
+              hidden$="[[__hideIndicator]]"
+            ></paper-progress>
           </app-toolbar>
         </app-header>
         <iron-pages
@@ -150,22 +224,46 @@
           fallback-selection=404
           role=main
           >
-          <hc-home name=home></hc-home>
-          <hc-intake name=intake></hc-intake>
-          <hc-location-lookup name=location-lookup></hc-location-lookup>
-          <hc-manage name=manage></hc-manage>
-          <hc-reporting name=reporting></hc-reporting>
-          <hc-user-lookup name=user-lookup></hc-user-lookup>
-          <hc-404 name=404></hc-404>
+          <hc-home name=home language=[[language]]></hc-home>
+          <hc-intake name=intake language=[[language]]></hc-intake>
+          <hc-location-lookup name=location-lookup language=[[language]]></hc-location-lookup>
+          <hc-manage name=manage language=[[language]]></hc-manage>
+          <hc-reporting name=reporting language=[[language]]></hc-reporting>
+          <hc-user-lookup name=user-lookup language=[[language]]></hc-user-lookup>
+          <hc-404 name=404 language=[[language]]></hc-404>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
+
+    <paper-dialog id=login-dialog>
+      <paper-input
+        label=[[localize('hc-6-app-email')]]
+        value={{_email}}
+        type=username
+      ></paper-input>
+      <paper-input
+        label=[[localize('hc-6-app-password')]]
+        value={{_password}}
+        type=password
+      ></paper-input>
+      <div class="buttons">
+        <paper-button dialog-confirm on-click=_login type=submit>[[localize('hc-6-app-login')]]</paper-button>
+        <paper-button dialog-dismiss>[[localize('hc-6-app-cancel')]]</paper-button>
+      </div>
+    </paper-dialog>
   </template>
 
   <script>
     Polymer({
       is: 'hc-6-app',
+      behaviors: [
+        Polymer.AppLocalizeBehavior
+      ],
       properties: {
+        language: {
+          type: String,
+          value: 'en'
+        },
         appVersion: {
           type: String,
           value: 'dev'
@@ -173,36 +271,78 @@
         page: {
           type: String,
           reflectToAttribute: true
+        },
+        _isLoggedIn: {
+          type: Boolean,
+          value: false
+        },
+        __hideSearch: {
+          type: Boolean,
+          value: true
         }
       },
       observers: [
         '_routePageChanged(routeData.page)',
         '_computePageName(page, appVersion)'
       ],
-
       // Lifecycle Hooks
       ready() {
+        this._hideLoadingIndicator();
         // Sign in Anonymous
         // if (this.)
         // this.$.auth
       },
-
-
+      attached() {
+        this.loadResources(this.resolveUrl('../data/locales.json'));
+      },
+      login() {
+        this._opened = false;
+        this.$['login-dialog'].open();
+      },
+      logout() {
+        this.$.auth.signOut();
+      },
+      _login() {
+        this.$.auth.signInWithEmailAndPassword(this._email, this._password).
+          then(() => {
+            this._email = '';
+            this._password = '';
+          });
+      },
       // Routing
       _routePageChanged(page) {
         this.page = page || 'home';
       },
       _computePageName(page, appVersion) {
         // Load page import on demand. Show 404 page if fails
+        this.__hideIndicator = false;
+        if (this.$.mainMenu.opened) {
+          this.$.mainMenu.toggle();
+        }
+
         const resolvedPageUrl = this.resolveUrl(`hc-${page}.html?v=${appVersion}`);
-        this.importHref(resolvedPageUrl, null, this._showPage404, true);
+        this.importHref(resolvedPageUrl, this._hideLoadingIndicator, this._showPage404, true);
       },
       _showPage404() {
         this.page = '404';
       },
+      _hideLoadingIndicator() {
+        this.__hideIndicator = true;
+      },
+
+
+      // Search
+      _toggleSearch() {
+        this.__hideSearch = !this.__hideSearch;
+      },
+      _submitSearch() {
+        console.log('searching!');
+        this._toggleSearch();
+      },
+
 
       // Auth
-      _handleAuthChange(event) {
+      _handleAuthChange() {
         // const status = event.detail.statusKnown;
         // if (status) {
         //   // if admin -> admin

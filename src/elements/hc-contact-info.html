@@ -1,0 +1,148 @@
+<link rel=import href=../shared-styles.html>
+<link rel=import href=../../bower_components/polymer/polymer.html>
+<link rel=import href=../../bower_components/gold-zip-input/gold-zip-input.html>
+<link rel=import href=../../bower_components/paper-input/paper-input.html>
+<link rel=import href=../../bower_components/app-localize-behavior/app-localize-behavior.html>
+<link rel=import href=../../bower_components/gold-email-input/gold-email-input.html>
+<link rel=import href=../../bower_components/gold-phone-input/gold-phone-input.html>
+
+<!--
+Used to gather contact information from an entity.
+contactInfo: {
+  address: {
+    street: String,
+    city: String,
+    state: String,
+    zip: String
+  },
+  phoneNumber: Number,
+  email: String,
+  fax: Number
+}
+-->
+<dom-module id=hc-contact-info>
+  <template>
+    <style include=shared-styles>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <template
+      is=dom-if
+      if=[[!hideAddress]]
+      >
+      <paper-input
+        label=[[localize('contact-info-address-street')]]
+        value={{address.street}}
+        disabled=[[readOnly]]
+        auto-validate
+      ></paper-input>
+      <paper-input
+        value={{address.city}}
+        label=[[localize('contact-info-address-city')]]
+        disabled=[[readOnly]]
+        auto-validate
+      ></paper-input>
+      <paper-input
+        label=[[localize('contact-info-address-state')]]
+        value={{address.state}}
+        disabled=[[readOnly]]
+        auto-validate
+      ></paper-input>
+      <gold-zip-input
+        auto-validate
+        label=[[localize('contact-info-address-zip')]]
+        value={{address.zip}}
+        disabled=[[readOnly]]
+      ></gold-zip-input>
+    </template>
+    <template
+      is=dom-if
+      if=[[!hideEmail]]
+      >
+      <gold-email-input
+        auto-validate
+        label=[[localize('contact-info-email')]]
+        value={{email}}
+      ></gold-email-input>
+    </template>
+    <template
+      is=dom-if
+      if=[[!hideFax]]
+      >
+      <gold-phone-input
+        value={{fax}}
+        phone-number-pattern=XXX-XXX-XXXX
+        auto-validate
+        label=[[localize('contact-info-fax')]]
+      ></gold-phone-input>
+    </template>
+    <template
+      is=dom-if
+      is=[[!hidePhoneNumber]]
+      >
+      <gold-phone-input
+        value={{phoneNumber}}
+        phone-number-pattern=XXX-XXX-XXXX
+        auto-validate
+        label=[[localize('contact-info-phone-number')]]
+      ></gold-phone-input>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: 'hc-contact-info',
+      behaviors: [
+        Polymer.AppLocalizeBehavior
+      ],
+      properties: {
+        address: {
+          notify: true,
+          type: Object,
+          value: () => ({
+            zip: ''
+          })
+        },
+        email: {
+          notify: true,
+          type: String,
+          value: ''
+        },
+        fax: {
+          notify: true,
+          type: String,
+          value: ''
+        },
+        hideAddress: {
+          type: Boolean,
+          value: false
+        },
+        hideEmail: {
+          type: Boolean,
+          value: false
+        },
+        hideFax: {
+          type: Boolean,
+          value: false
+        },
+        hidePhoneNumber: {
+          type: Boolean,
+          value: false
+        },
+        phoneNumber: {
+          notify: true,
+          type: String,
+          value: ''
+        },
+        readOnly: {
+          type: Boolean,
+          value: false
+        }
+      },
+      attached() {
+        this.loadResources(this.resolveUrl('../../data/locales.json'));
+      },
+    });
+  </script>
+</dom-module>

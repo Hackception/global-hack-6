@@ -1,0 +1,31 @@
+//intake-data
+"intakeDataId" : {
+  intakeQuestionId : 0,
+  constraintDate : date,
+  constraintDateRange : range,
+  constraintBoolean : true,
+  constraintEnum : [{enum-option}],
+  constraintNumber : 0,
+  cocs : {
+    cocId : true,
+    cocId2 : true
+  },
+  programs : {
+    programId : true,
+    programId2 : true
+  },
+  userProfiles : {
+    userProfileId : true,
+    userProfileId2 : true
+  }
+}
+
+"intakeQuestionId" : {
+  userProfileDescription : '',
+  questionDescription : '',
+  answerType : '(boolean,date,dateRange,enum,number)',
+  intakeData : {
+    intakeDataId : true,
+    intakeDataId2 : true
+  }
+}

@@ -1,8 +1,13 @@
+//COC
 "cocID" : {
   name: '',
   contactInfo: {
-    geolocation: '',
-    address: '',
+    address: {
+      street: '',
+      city: '',
+      state: '',
+      zip: ''
+    },
     phoneNumber: '',
     email: '',
     fax: ''
@@ -24,8 +29,12 @@ var cocID = firebase.database().ref().child('cocs').push().key;
 firebase.database().ref('cocs/' + cocID).set({
   name: '',
   contactInfo: {
-    geolocation: '',
-    address: '',
+    address: {
+      street: '',
+      city: '',
+      state: '',
+      zip: ''
+    },
     phoneNumber: '',
     email: '',
     fax: ''
@@ -44,14 +53,151 @@ firebase.database().ref('cocs/' + cocID).set({
   }
 });
 
-intake-data : [
-  {
-    intake-question-id : intake-question-1,
-    constraint : true,
-    constraint-date : date,
-    constraint-date-range : range,
-    constraint-boolean : boolean,
-    constraint-enum : [{enum-option}],
-    constraint-number : number,
+//Location
+
+"locationId" : {
+  name: '',
+  capacity : 0,
+  contactInfo: {
+    address: {
+      street: '',
+      city: '',
+      state: '',
+      zip: ''
+    },
+    phoneNumber: '',
+    email: '',
+    fax: ''
+  },
+  cocs : {
+    cocId1 : true
+  },
+  members : {
+    memberId1 : true,
+    memberId2 : true
+  },
+  programs : {
+    programId1 : true,
+    programId2 : true
+  },
+  services : {
+    serviceId1 : true,
+    serviceId2 : true
   }
-]
+}
+
+var locationID = firebase.database().ref().child('locations').push().key;
+firebase.database().ref('locations/' + locationID).set({
+  name: '',
+  capacity : 0,
+  contactInfo: {
+    address: {
+      street: '',
+      city: '',
+      state: '',
+      zip: ''
+    },
+    phoneNumber: '',
+    email: '',
+    fax: ''
+  },
+  cocs : {
+    cocId1 : true
+  },
+  members : {
+    memberId1 : true,
+    memberId2 : true
+  },
+  programs : {
+    programId1 : true,
+    programId2 : true
+  },
+  services : {
+    serviceId1 : true,
+    serviceId2 : true
+  }
+});
+
+// programs
+"programId" : {
+  name: '',
+  contactInfo: {
+    address: {
+      street: '',
+      city: '',
+      state: '',
+      zip: ''
+    },
+    phoneNumber: '',
+    email: '',
+    fax: ''
+  },
+  locations : {
+    locationId : true,
+    locationId2 : true,
+  },
+  services : {
+    serviceId : true,
+    serviceId2 : true
+  },
+  intakeData : {
+    intakeId : true,
+    intakeId2 : true
+  },
+  members : {
+    memberId1 : true,
+    memberId2 : true
+  },
+}
+
+var programID = firebase.database().ref().child('programs').push().key;
+firebase.database().ref('programs/' + programID).set({
+  name: '',
+  contactInfo: {
+    address: {
+      street: '',
+      city: '',
+      state: '',
+      zip: ''
+    },
+    phoneNumber: '',
+    email: '',
+    fax: ''
+  },
+  locations : {
+    locationId : true,
+    locationId2 : true,
+  },
+  services : {
+    serviceId : true,
+    serviceId2 : true
+  },
+  intakeData : {
+    intakeId : true,
+    intakeId2 : true
+  },
+  members : {
+    memberId1 : true,
+    memberId2 : true
+  },
+});
+
+//services
+"serviceId" : {
+  name: '',
+  description: '',
+  programs : {
+    programId : true,
+    programId2 : true
+  }
+}
+
+var serviceID = firebase.database().ref().child('services').push().key;
+firebase.database().ref('services/' + serviceID).set({
+  name: '',
+  description: '',
+  programs : {
+    programId : true,
+    programId2 : true
+  }
+});
