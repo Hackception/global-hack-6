@@ -11,7 +11,9 @@ var express = require('express'),
   api = require('./index'),
   http = require('http'),
   path = require('path'),
-  firebase = require("firebase");;
+  firebase = require('firebase'),
+  callResponse = require('./call-response'),
+  callPath = require('./call-path');
 
 var app = module.exports = express();
 
@@ -55,7 +57,17 @@ var db = firebase.database();
 // JSON API
 app.get('*', api.name);
 app.post('/name', api.post_name);
+app.post('something', function(req, res) {
 
+  var args = {}
+  callResponse.handleCall(db, args, nextStep);
+})
+
+function nextStep(index) {
+  // TODO
+
+  console.log(index);
+}
 
 /**
  * Start Server
