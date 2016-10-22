@@ -78,7 +78,6 @@ exports.question = function(req, res) {
             say('Please record your response after the beep. Press any key to finish.');
             twiml.record({
                 action: action,
-                timeout: question.timeout,
                 // TODO uncomment when ready for transcription
                 //transcribe: true,
                 //transcribeCallback: '/voice/' + surveyres._id +
