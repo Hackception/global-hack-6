@@ -1,0 +1,20 @@
+<link rel=import href=../shared-styles.html>
+<link rel=import href=../../bower_components/polymer/polymer.html>
+<link rel=import href=./hc-contact-info.html>
+
+<dom-module id=hc-manage-coc>
+  <template>
+    <style include=shared-styles>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <hc-contact-info language=[[language]]></hc-contact-info>
+  </template>
+  <script>
+    Polymer({
+      is: 'hc-manage-coc'
+    });
+  </script>
+</dom-module>

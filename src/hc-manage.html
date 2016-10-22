@@ -1,5 +1,6 @@
 <link rel=import href=../bower_components/polymer/polymer.html>
 <link rel=import href=shared-styles.html>
+<link rel=import href=elements/hc-manage-coc.html>
 
 <dom-module id=hc-manage>
   <template>
@@ -11,6 +12,8 @@
 
     <div class=card>
       <h1>Manage</h1>
+
+      <hc-manage-coc language=[[language]]></hc-manage-coc>
     </div>
   </template>
   <script>
