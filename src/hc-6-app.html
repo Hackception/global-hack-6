@@ -10,8 +10,8 @@
 <link rel=import href=../bower_components/app-layout/app-header-layout/app-header-layout.html>
 <link rel=import href=../bower_components/app-layout/app-toolbar/app-toolbar.html>
 <link rel=import href=../bower_components/paper-icon-button/paper-icon-button.html>
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel=import href=../bower_components/iron-pages/iron-pages.html>
-<link rel=import href=../bower_components/iron-selector/iron-selector.html>
 <link rel=import href=../bower_components/iron-selector/iron-selector.html>
 
 <link rel=import href=app-theme.html>
@@ -22,7 +22,7 @@
 
 <dom-module id=hc-6-app>
   <template>
-    <style>
+    <style include="app-theme">
       :host {
         display: block;
       }
@@ -33,6 +33,14 @@
       app-header paper-icon-button {
         --paper-icon-button-ink-color: var(--text-primary-color);
       }
+
+      app-drawer {
+        --app-drawer-content-container: {
+          background-color: var(--primary-background-color);
+        };
+      }
+
+
       .drawer-list {
         margin: 0 20px;
       }
@@ -41,7 +49,7 @@
         padding: 0 16px;
         line-height: 40px;
         text-decoration: none;
-        color: var(--primary-background-color);
+        color: var(--primary-text-color);
       }
       .drawer-list a.iron-selected {
         color: var(--accent-color);

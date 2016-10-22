@@ -1,0 +1,163 @@
+//COC
+"cocID" : {
+  name: '',
+  contactInfo: {
+    geolocation: '',
+    address: '',
+    phoneNumber: '',
+    email: '',
+    fax: ''
+  },
+  locations : {
+    locationId : true,
+    locationId2 : true,
+  },
+  intakeData : {
+    intakeId : true,
+    intakeId2 : true
+  },
+  members : {
+    memberId1 : true,
+    memberId2 : true
+  }
+}
+var cocID = firebase.database().ref().child('cocs').push().key;
+firebase.database().ref('cocs/' + cocID).set({
+  name: '',
+  contactInfo: {
+    geolocation: '',
+    address: '',
+    phoneNumber: '',
+    email: '',
+    fax: ''
+  },
+  locations : {
+    locationId : true,
+    locationId2 : true,
+  },
+  intakeData : {
+    intakeId : true,
+    intakeId2 : true
+  },
+  members : {
+    memberId1 : true,
+    memberId2 : true
+  }
+});
+
+//Location
+
+"locationId" : {
+  name: '',
+  capacity : 0,
+  contactInfo: {
+    geolocation: '',
+    address: '',
+    phoneNumber: '',
+    email: '',
+    fax: ''
+  },
+  cocs : {
+    cocId1 : true
+  },
+  members : {
+    memberId1 : true,
+    memberId2 : true
+  },
+  programs : {
+    programId1 : true,
+    programId2 : true
+  },
+  services : {
+    serviceId1 : true,
+    serviceId2 : true
+  }
+}
+
+var locationID = firebase.database().ref().child('locations').push().key;
+firebase.database().ref('locations/' + locationID).set({
+  name: '',
+  capacity : 0,
+  contactInfo: {
+    geolocation: '',
+    address: '',
+    phoneNumber: '',
+    email: '',
+    fax: ''
+  },
+  cocs : {
+    cocId1 : true
+  },
+  members : {
+    memberId1 : true,
+    memberId2 : true
+  },
+  programs : {
+    programId1 : true,
+    programId2 : true
+  },
+  services : {
+    serviceId1 : true,
+    serviceId2 : true
+  }
+});
+
+// programs
+"programId" : {
+  name: '',
+  contactInfo: {
+    geolocation: '',
+    address: '',
+    phoneNumber: '',
+    email: '',
+    fax: ''
+  },
+  locations : {
+    locationId : true,
+    locationId2 : true,
+  },
+  intakeData : {
+    intakeId : true,
+    intakeId2 : true
+  },
+  members : {
+    memberId1 : true,
+    memberId2 : true
+  },
+}
+
+var programID = firebase.database().ref().child('programs').push().key;
+firebase.database().ref('programs/' + programID).set({
+  name: '',
+  contactInfo: {
+    geolocation: '',
+    address: '',
+    phoneNumber: '',
+    email: '',
+    fax: ''
+  },
+  locations : {
+    locationId : true,
+    locationId2 : true,
+  },
+  intakeData : {
+    intakeId : true,
+    intakeId2 : true
+  },
+  members : {
+    memberId1 : true,
+    memberId2 : true
+  },
+});
+
+intake-data : [
+  {
+    intake-question-id : intake-question-1,
+    constraint : true,
+    constraint-date : date,
+    constraint-date-range : range,
+    constraint-boolean : boolean,
+    constraint-enum : [{enum-option}],
+    constraint-number : number,
+  }
+]
