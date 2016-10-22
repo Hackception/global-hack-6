@@ -1,5 +1,6 @@
 <link rel=import href=../shared-styles.html>
 <link rel=import href=../../bower_components/polymer/polymer.html>
+<link rel=import href=../../bower_components/polymerfire/firebase-query.html>
 
 <dom-module id=hc-manage-location>
   <template>
@@ -9,6 +10,17 @@
       }
     </style>
 
+    test [[data]]
+    <!-- <firebase-query
+      log
+      path=/locations/
+      data={{data}}
+    ></firebase-query> -->
+    <template
+      is=dom-repeat
+      items={{data}}>
+      [[item]]
+    </template>
   </template>
   <script>
     Polymer({
