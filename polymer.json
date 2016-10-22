@@ -11,6 +11,8 @@
    "bower.json"
   ],
   "includeDependencies": [
-    "bower_components/webcomponentsjs/webcomponents-lite.min.js"
+    "bower_components/webcomponentsjs/webcomponents-lite.min.js",
+    "bower_components/babel-polyfill/browser-polyfill.js",
+    "bower_components/SpinKit/css/spinners/7-three-bounce.css"
   ]
 }

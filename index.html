@@ -36,6 +36,42 @@
     <meta name="msapplication-TileColor" content="#3f51b5">
     <meta name="msapplication-tap-highlight" content="no">
 
+    <link rel="import" async href="/src/hc-6-app.html">
+
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Roboto', 'Noto', sans-serif;
+        line-height: 1.5;
+        min-height: 100vh;
+        background-color: #eeeeee;
+      }
+      .loader {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+    <link rel="stylesheet" href="/bower_components/SpinKit/css/spinners/7-three-bounce.css">
+  </head>
+
+  <body>
+    <hc-6-app app-version="${x.y.z}">
+      <div class="loader">
+        <div class="sk-three-bounce">
+          <div class="sk-child sk-bounce1"></div>
+          <div class="sk-child sk-bounce2"></div>
+          <div class="sk-child sk-bounce3"></div>
+        </div>
+      </div>
+    </hc-6-app>
+
+    <script defer href="/bower_components/babel-polyfill/browser-polyfill.js"></script>
     <script>
       // Setup Polymer options
       window.Polymer = {
@@ -82,46 +118,5 @@
         });
       }
     </script>
-
-    <link rel=import async href=/src/hc-6-app.html>
-    <link rel=import async href=./bower_components/polymerfire/firebase-app.html>
-
-    <style>
-      body {
-        margin: 0;
-        font-family: 'Roboto', 'Noto', sans-serif;
-        line-height: 1.5;
-        min-height: 100vh;
-        background-color: #eeeeee;
-      }
-      .loader {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-    </style>
-    <link rel="stylesheet" href="/bower_components/SpinKit/css/spinners/7-three-bounce.css">
-  </head>
-  <body>
-    <firebase-app
-       api-key="AIzaSyB31LHiV6XdxiAEl2UuFwgdbS5CQ_nIfiQ"
-       auth-domain="global-hack-6.firebaseapp.com"
-       database-url="https://global-hack-6.firebaseio.com"
-       storage-bucket="global-hack-6.appspot.com"
-       messaging-sender-id="1020118093880"
-    ></firebase-app>
-
-    <hc-6-app>
-      <div class="sk-three-bounce">
-        <div class="sk-child sk-bounce1"></div>
-        <div class="sk-child sk-bounce2"></div>
-        <div class="sk-child sk-bounce3"></div>
-      </div>
-    </hc-6-app>
   </body>
 </html>
