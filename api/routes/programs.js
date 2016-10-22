@@ -5,7 +5,7 @@ router.route('/')
   res.json(global.db.ref('programs/' + newPostKey).set(req.body).key);
 })
 .get(function(req, res) {
-  var search = 'programs/' + (req.body.key || '');
+  var search = 'programs/' + (req.query.key || '');
   global.db.ref(search).once('value').then(function(snapshot) {
     res.json(snapshot.val());
   });
@@ -13,7 +13,7 @@ router.route('/')
 ;
 router.route('/services')
 .get(function(req, res) {
-  var programId = req.body.programId;
+  var programId = req.query.programId;
   global.db.ref('programs/' + programId + '/services/').once('value').then(function(snapshot) {
     res.json(snapshot.val());
   });

@@ -5,7 +5,7 @@ router.route('/')
   res.json(global.db.ref('cocs/' + newPostKey).set(req.body).key);
 })
 .get(function(req, res) {
-  var search = 'cocs/' + (req.body.key || '');
+  var search = 'cocs/' + (req.query.key || '');
   global.db.ref(search).once('value').then(function(snapshot) {
     res.json(snapshot.val());
   });
@@ -13,7 +13,7 @@ router.route('/')
 ;
 router.route('/locations')
 .get(function(req, res) {
-  var cocsId = req.body.cocsId;
+  var cocsId = req.query.cocsId;
   global.db.ref('cocs/' + cocsId + '/locations/').once('value').then(function(snapshot) {
     res.json(snapshot.val());
   });
