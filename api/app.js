@@ -22,13 +22,17 @@ var app = module.exports = express();
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.use(morgan('dev'));
-app.use(bodyParser());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
 app.use(methodOverride());
 app.options('*', cors());
+app.get('*', cors());
+app.put('*', cors());
+app.post('*', cors());
+app.delete('*', cors());
+app.patch('*', cors());
 
 var env = process.env.NODE_ENV || 'development';
 

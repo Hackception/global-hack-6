@@ -1,7 +1,7 @@
-<link rel=import href=../shared-styles.html>
 <link rel=import href=../../bower_components/polymer/polymer.html>
+<link rel=import href=../shared-styles.html>
 <link rel=import href=./hc-contact-info.html>
-<link rel=import href=../../bower_components/polymerfire/firebase-query.html>
+<link rel=import href=../../bower_components/iron-ajax/iron-ajax.html>
 
 <dom-module id=hc-manage-coc>
   <template>
@@ -11,23 +11,30 @@
       }
     </style>
 
-    test [[data]]
-    <firebase-query
-      app-name=hc-app
-      log
-      path=/cocs
-      data={{data}}
-    ></firebase-query>
+    <iron-ajax
+      auto
+      url=[[baseUrl]]/cocs
+      last-response={{items}}
+      headers=[[headers]]
+    ></iron-ajax>
     <!-- <hc-contact-info language=[[language]]></hc-contact-info> -->
-    <tempalte
+    <template
       is=dom-repeat
-      items={{data}}>
+      items={{items}}>
       [[item]]
     </template>
   </template>
   <script>
     Polymer({
-      is: 'hc-manage-coc'
+      is: 'hc-manage-coc',
+      properties: {
+        baseUrl: String,
+        headers: Object,
+        items: {
+          type: Array,
+          value: () => []
+        }
+      }
     });
   </script>
 </dom-module>
