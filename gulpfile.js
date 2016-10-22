@@ -50,7 +50,11 @@ const project = require('./gulp-tasks/project.js');
 const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
 const htmlmin = require('gulp-htmlmin');
-const cleanCSS = require('gulp-clean-css');
+const postcss = require('gulp-postcss');
+const autoprefixer = require('autoprefixer');
+const cssnano = require('cssnano');
+const replace = require('gulp-replace');
+const pkgJson = require('./package.json');
 
 // The source task will split all of your source files into one
 // big ReadableStream. Source files are those in src/** as well as anything
@@ -61,16 +65,18 @@ const cleanCSS = require('gulp-clean-css');
 // which filters all images and runs them through imagemin
 function source() {
   return project.splitSource()
-  pipe(gulpif('**/*.css', cleanCSS())).
-  pipe(gulpif('**/*.html', htmlmin({
-    collapseWhitespace: true,
-    removeComments: true,
-    minifyCSS: true,
-    uglifyJS: true
-  }))).
-  pipe(gulpif('**/*.js', babel())).
-  pipe(gulpif('**/*.js', uglify())).
-  pipe(project.rejoin());
+    .pipe(gulpif('**/*.css', postcss([
+      autoprefixer(),
+      cssnano()
+    ])))
+    .pipe(gulpif('index.html', replace('${x.y.z}', pkgJson.version)))
+    .pipe(gulpif('**/*.html', htmlmin({
+      collapseWhitespace: true,
+      removeComments: true
+    })))
+    .pipe(gulpif('**/*.js', babel()))
+    .pipe(gulpif('**/*.js', uglify()))
+    .pipe(project.rejoin());
 }
 
 // The dependencies task will split all of your bower_components files into one
@@ -79,16 +85,17 @@ function source() {
 // case you need it :)
 function dependencies() {
   return project.splitDependencies()
-  pipe(gulpif('**/*.css', cleanCSS())).
-  pipe(gulpif('**/*.html', htmlmin({
+  .pipe(gulpif('**/*.css', postcss([
+    autoprefixer(),
+    cssnano()
+  ])))
+  .pipe(gulpif('**/*.html', htmlmin({
     collapseWhitespace: true,
-    removeComments: true,
-    // minifyCSS: true,
-    uglifyJS: true
-  }))).
-  pipe(gulpif('**/*.js', babel())).
-  pipe(gulpif('**/*.js', uglify())).
-  pipe(project.rejoin());
+    removeComments: true
+  })))
+  .pipe(gulpif('**/*.js', babel()))
+  .pipe(gulpif('**/*.js', uglify()))
+  .pipe(project.rejoin());
 }
 
 // Clean the build directory, split all source and dependency files into streams

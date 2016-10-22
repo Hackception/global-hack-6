@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - "stable"
+script:
+  - npm install --depth=0
+  - bower install
+  - gulp
+install:
+  - npm install -g firebase-tools bower gulpjs/gulp#4.0
+deploy:
+  skip_cleanup: true
+  provider: 'script'
+  script: firebase deploy --token ${FIREBASE_TOKEN} --project global-hack-6
+  on:
+    branch: 'master'

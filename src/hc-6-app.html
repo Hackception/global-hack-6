@@ -1,0 +1,217 @@
+<link rel=import href=../bower_components/polymer/polymer.html>
+<link rel=import href=../bower_components/polymerfire/firebase-app.html>
+<link rel=import href=../bower_components/polymerfire/firebase-auth.html>
+<link rel=import href=../bower_components/app-route/app-location.html>
+<link rel=import href=../bower_components/app-route/app-route.html>
+<link rel=import href=../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html>
+<link rel=import href=../bower_components/app-layout/app-drawer/app-drawer.html>
+<link rel=import href=../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html>
+<link rel=import href=../bower_components/app-layout/app-header/app-header.html>
+<link rel=import href=../bower_components/app-layout/app-header-layout/app-header-layout.html>
+<link rel=import href=../bower_components/app-layout/app-toolbar/app-toolbar.html>
+<link rel=import href=../bower_components/paper-icon-button/paper-icon-button.html>
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel=import href=../bower_components/iron-pages/iron-pages.html>
+<link rel=import href=../bower_components/iron-selector/iron-selector.html>
+
+<link rel=import href=app-theme.html>
+
+<!-- <link rel=import href=../bower_components/platinum-sw/platinum-sw-register.html> -->
+<!-- <link rel=import href=../bower_components/platinum-sw/platinum-sw-offline-analytics.html> -->
+<!-- <link rel=import href=../bower_components/google-analytics/google-analytics-loader.html> -->
+
+<dom-module id=hc-6-app>
+  <template>
+    <style include="app-theme">
+      :host {
+        display: block;
+      }
+      app-header {
+        background-color: var(--default-primary-color);
+        color: var(--text-primary-color);
+      }
+      app-header paper-icon-button {
+        --paper-icon-button-ink-color: var(--text-primary-color);
+      }
+
+      app-drawer {
+        --app-drawer-content-container: {
+          background-color: var(--primary-background-color);
+        };
+      }
+
+
+      .drawer-list {
+        margin: 0 20px;
+      }
+      .drawer-list a {
+        display: block;
+        padding: 0 16px;
+        line-height: 40px;
+        text-decoration: none;
+        color: var(--primary-text-color);
+      }
+      .drawer-list a.iron-selected {
+        color: var(--accent-color);
+        font-weight: bold;
+      }
+      .drawer-list a.subroute {
+        padding-left: 32px;
+      }
+    </style>
+
+    <!-- <google-analytics-loader
+      api-ready="{{_analyticsReady}}"
+    ></google-analytics-loader>
+    <platinum-sw-register auto-register>
+      <platinum-sw-offline-analytics></platinum-sw-offline-analytics>
+    </platinum-sw-register> -->
+
+    <firebase-app
+       api-key="AIzaSyB31LHiV6XdxiAEl2UuFwgdbS5CQ_nIfiQ"
+       auth-domain="global-hack-6.firebaseapp.com"
+       database-url="https://global-hack-6.firebaseio.com"
+       storage-bucket="global-hack-6.appspot.com"
+       messaging-sender-id="1020118093880"
+    ></firebase-app>
+    <firebase-auth id="auth"
+      user="{{user}}"
+      online={{_online}}
+      on-status-known-changed="_handleAuthChange"
+      on-error="_handleError"
+    ></firebase-auth>
+
+
+
+    <app-location
+      route={{route}}
+    ></app-location>
+    <app-route
+      route={{route}}
+      pattern=/:page
+      data={{routeData}}
+      tail={{subroute}}
+    ></app-route>
+
+    <app-drawer-layout fullbleed>
+      <!-- Drawer content -->
+      <app-drawer>
+        <app-toolbar>Menu</app-toolbar>
+        <iron-selector
+          selected=[[page]]
+          attr-for-selected=name
+          class="drawer-list"
+          role=navigation
+          >
+          <a
+            name=home
+            href=/home
+          >Home</a>
+          <a
+            name=intake
+            href=/intake
+          >Intake</a>
+          <a
+            name=location-lookup
+            href=/location-lookup
+          >Location Lookup</a>
+          <a
+            name=manage
+            href=/manage
+          >Manage</a>
+          <a
+            name=reporting
+            href=/reporting
+          >Reporting</a>
+          <a
+            name=user-lookup
+            href=/user-lookup
+          >User Lookup</a>
+        </iron-selector>
+      </app-drawer>
+      <!-- Main content -->
+      <app-header-layout has-scrolling-region>
+        <app-header
+          condenses
+          reveals
+          effects=waterfall
+          >
+          <app-toolbar>
+            <paper-icon-button
+              icon=menu
+              drawer-toggle
+            ></paper-icon-button>
+            <div main-title>Homeless Management Information System</div>
+          </app-toolbar>
+        </app-header>
+        <iron-pages
+          selected=[[page]]
+          attr-for-selected=name
+          fallback-selection=404
+          role=main
+          >
+          <hc-home name=home></hc-home>
+          <hc-intake name=intake></hc-intake>
+          <hc-location-lookup name=location-lookup></hc-location-lookup>
+          <hc-manage name=manage></hc-manage>
+          <hc-reporting name=reporting></hc-reporting>
+          <hc-user-lookup name=user-lookup></hc-user-lookup>
+          <hc-404 name=404></hc-404>
+        </iron-pages>
+      </app-header-layout>
+    </app-drawer-layout>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'hc-6-app',
+      properties: {
+        appVersion: {
+          type: String,
+          value: 'dev'
+        },
+        page: {
+          type: String,
+          reflectToAttribute: true
+        }
+      },
+      observers: [
+        '_routePageChanged(routeData.page)',
+        '_computePageName(page, appVersion)'
+      ],
+
+      // Lifecycle Hooks
+      ready() {
+        // Sign in Anonymous
+        // if (this.)
+        // this.$.auth
+      },
+
+
+      // Routing
+      _routePageChanged(page) {
+        this.page = page || 'home';
+      },
+      _computePageName(page, appVersion) {
+        // Load page import on demand. Show 404 page if fails
+        const resolvedPageUrl = this.resolveUrl(`hc-${page}.html?v=${appVersion}`);
+        this.importHref(resolvedPageUrl, null, this._showPage404, true);
+      },
+      _showPage404() {
+        this.page = '404';
+      },
+
+      // Auth
+      _handleAuthChange(event) {
+        // const status = event.detail.statusKnown;
+        // if (status) {
+        //   // if admin -> admin
+        //   // else user
+        // } else {
+        //   this.page = 'login';
+        // }
+      }
+
+    });
+  </script>
+</dom-module>
