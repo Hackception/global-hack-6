@@ -12,7 +12,7 @@
     </style>
 
     <iron-ajax
-      id=ajax
+      auto
       url=[[baseUrl]]/cocs
       last-response={{items}}
       headers=[[headers]]
@@ -34,12 +34,6 @@
           type: Array,
           value: () => []
         }
-      },
-      ready() {
-        setTimeout(() => {
-          console.log(this.headers);
-          this.$.ajax.generateRequest();
-        });
       }
     });
   </script>
