@@ -1,5 +1,11 @@
 {
   "en": {
-    "test": "test"
+    "contact-info-address-street": "Enter Street",
+    "contact-info-address-city": "Enter City",
+    "contact-info-address-state": "Enter State",
+    "contact-info-address-zip": "Enter Zip",
+    "contact-info-email": "Enter Email",
+    "contact-info-fax": "Enter Fax",
+    "contact-info-phone-number": "Enter Phone Number"
   }
 }

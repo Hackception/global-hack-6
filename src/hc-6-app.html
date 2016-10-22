@@ -71,7 +71,6 @@
       }
     </style>
 
-    <h1>[[localize('test')]]</h1>
     <!-- <google-analytics-loader
       api-ready="{{_analyticsReady}}"
     ></google-analytics-loader>
@@ -171,13 +170,13 @@
           fallback-selection=404
           role=main
           >
-          <hc-home name=home></hc-home>
-          <hc-intake name=intake></hc-intake>
-          <hc-location-lookup name=location-lookup></hc-location-lookup>
-          <hc-manage name=manage></hc-manage>
-          <hc-reporting name=reporting></hc-reporting>
-          <hc-user-lookup name=user-lookup></hc-user-lookup>
-          <hc-404 name=404></hc-404>
+          <hc-home name=home language=[[language]]></hc-home>
+          <hc-intake name=intake language=[[language]]></hc-intake>
+          <hc-location-lookup name=location-lookup language=[[language]]></hc-location-lookup>
+          <hc-manage name=manage language=[[language]]></hc-manage>
+          <hc-reporting name=reporting language=[[language]]></hc-reporting>
+          <hc-user-lookup name=user-lookup language=[[language]]></hc-user-lookup>
+          <hc-404 name=404 language=[[language]]></hc-404>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
