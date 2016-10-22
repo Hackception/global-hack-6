@@ -1,0 +1,38 @@
+//client
+{
+  firstName : '',
+  middleName : '',
+  lastName : '',
+  ssn : '',
+  userProfileInfo : {
+    userProfileDescription : {
+      intakeDataId : 0,
+      answerType : '(boolean,date,dateRange,enum,number)',
+      answerBoolean : true,
+      answerDate : '10/17/16',
+      answerDateRange : dateRange,
+      answerEnum : [{enum-option}],
+      answerNumber : 0
+    }
+  }
+}
+//client
+{
+  firstName : '',
+  middleName : '',
+  lastName : '',
+  ssn : '',
+  userProfileInfo : {
+    userProfileDescription : {
+      intakeDataId : 0,
+      answerType : '(boolean,date,dateRange,enum,number)',
+      answerBoolean : true,
+      answerDate : '10/17/16',
+      answerDateRange : dateRange,
+      answerEnum : [{enum-option}],
+      answerNumber : 0
+    }
+  }
+  clientId : '',
+  changeDate : date
+}
