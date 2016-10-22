@@ -1,16 +1,24 @@
 "cocID" : {
-name: '',
-contactInfo: {
-  geolocation: '',
-  address: '',
-  phoneNumber: '',
-  email: '',
-  fax: ''
-  // TODO: Get information about CoC
-},
-members : {
-  ...
-}
+  name: '',
+  contactInfo: {
+    geolocation: '',
+    address: '',
+    phoneNumber: '',
+    email: '',
+    fax: ''
+  },
+  locations : {
+    locationId : true,
+    locationId2 : true,
+  },
+  intakeData : {
+    intakeId : true,
+    intakeId2 : true
+  },
+  members : {
+    memberId1 : true,
+    memberId2 : true
+  }
 }
 var cocID = firebase.database().ref().child('cocs').push().key;
 firebase.database().ref('cocs/' + cocID).set({
