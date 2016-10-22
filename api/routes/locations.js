@@ -8,16 +8,17 @@ router.route('/')
   var keyList = req.query.keyList;
   var search = 'locations/' + (req.query.key || '');
   global.db.ref(search).once('value').then(function(snapshot) {
+    var dataSet = snapshot.val();
     if(keyList) {
       var arrayLength = myStringArray.length;
+      var dataResponse = {};
       for (var i = 0; i < arrayLength; i++) {
-        var dataSet = snapshot.val();
-        if(dataSet[keyList[i]]) {
-
-        }
+        dataResponse[i] = dataSet[keyList[i]] || {};
       }
+      res.json(dataResponse);
+    } else {
+      res.json(dataSet);
     }
-    res.json(snapshot.val());
   });
 })
 ;
