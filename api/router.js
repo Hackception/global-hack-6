@@ -1,17 +1,5 @@
-var express = require('express');
-var firebase = require('firebase');
-// var cocs = require('./routes/cocs');
-var router = express.Router();
-router.route('/cocs')
-.post(function(req, res) {
-  var newPostKey = global.db.ref().child('cocs').push().key;
-  res.json(global.db.ref('cocs/' + newPostKey).set(req.body).key);
-})
-.get(function(req, res) {
-  global.db.ref('cocs/').once('value').then(function(snapshot) {
-    res.json(snapshot.val());
-  });
-})
-;
+var router = require('express').Router();
+
+router.use('/cocs', require('./routes/cocs'));
+router.use('/questions', require('./routes/voice'));
 module.exports = router;
-//app.use('/locations',locationsRouter);

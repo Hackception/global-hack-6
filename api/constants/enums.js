@@ -1,10 +1,10 @@
-exports.questionTypes = {
+var questionTypes = {
     INPUT: 'input',
     SWITCH: 'switch',
     TEXT: 'text',
 };
 
-exports.questions = {
+var questions = {
     START: {
         text: 'Which question path?',
         type: questionTypes.SWITCH,
@@ -42,3 +42,4 @@ exports.questions = {
         key: 'favoriteColor'
     }
 };
+module.exports = {questionTypes, questions};

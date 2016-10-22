@@ -1,6 +1,6 @@
-var enums = require('./constants.enums');
+var enums = require('../constants/enums');
 
-exports.handleCall = function(db, args, cb) {
+exports.handleCall = function(args, cb) {
     var id = args.id;
     var phone = args.phone;
     var input = args.input;
@@ -8,23 +8,24 @@ exports.handleCall = function(db, args, cb) {
 
     // ask again if something breaks
     function askAgain() {
-        cb.call(null, args.index, null);
+        cb(null, args.index, null);
     }
 
     var responseId;
-    var call = db.ref('calls/' + id);
-    call.once('value', function(data) {
-        if (!data) {
+    var callRef = global.db.ref('calls/' + id);
+
+    callRef.once('value', function(data) {
+        if (!data.val()) {
             data = {
                 phone: phone,
                 responses: []
             };
-            call.push(data);
+            callRef.set(data);
         } else {
             // got something, check if we should save
             var key = node.question.key;
             if (key) {
-                var responsesRef = call.child('responses');
+                var responsesRef = callRef.child('responses/' + key);
                 var response = {};
                 if (node.question.type === enums.questionTypes.INPUT) {
                     response.answer = input;
@@ -38,13 +39,20 @@ exports.handleCall = function(db, args, cb) {
                     response.answer = null; // we'll populate this later
                     response.url = input; // store url of recording, just in case
                 }
-                responseId = responsesRef.push(response).key;
+                response.question = node.question.text;
+                responseId = responsesRef.set(response).key;
             }
         }
 
         var index;
-        if (node.question.type === enums.questionTypes.SWITCH) {
-            index = node.values[input].next; // if we're here, this is populated
+        if (!node) {
+          index = 0;
+        } else if (node.question.type === enums.questionTypes.SWITCH) {
+            var value = node.values[input];
+            if (!value) { // doesn't map up
+                return askAgain();
+            }
+            index = value.next; // if we're here, this is populated
         } else {
             index = node.next;
         }

@@ -1,6 +1,6 @@
 var enums = require('./enums');
 
-modules.exports = [{ // 0
+module.exports = [{ // 0
     question: enums.questions.START,
     values: {
       '1': {
@@ -33,7 +33,7 @@ modules.exports = [{ // 0
         store: false,
         next: null
       }
-    }
+    },
     next: null
 }, { // 4
     question: enums.questions.NAME,

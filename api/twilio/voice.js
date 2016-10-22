@@ -1,13 +1,13 @@
-var enums = require('./constants.enums'),
-    questionPath = require('./constants/question-path'),
+var enums = require('../constants/enums'),
+    questionPath = require('../constants/question-path'),
     twilio = require('twilio'),
-    responseStore = require('./db/response-store');
+    responseStore = require('../db/response-store');
 
 // Main question loop
-exports.question = function(req, res, db) {
+exports.question = function(req, res) {
     var currentIndex = req.params.index;
     var input = req.body.RecordingUrl || req.body.Digits;
-    var twiml = new twilio.Twimlres();
+    var twiml = new twilio.TwimlResponse();
     var previousNode;
     if (currentIndex) {
       previousNode = questionPath[currentIndex];
@@ -34,14 +34,14 @@ exports.question = function(req, res, db) {
         input: input,
         index: currentIndex
     };
-    responseStore.handleCall(db, args, function(err, index, responseId) {
+    responseStore.handleCall(args, function(err, index, responseId) {
         if (err) {
             say('Terribly sorry, but an error has occurred. Goodbye.');
             return respond();
         }
 
         // If question is null, we're done!
-        if (!index) {
+        if (index === null) {
             say('Thank you. Goodbye!');
             return respond();
         }

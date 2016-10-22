@@ -4,14 +4,13 @@
 
 var express = require('express'),
   bodyParser = require('body-parser'),
+  cors = require('cors'),
   methodOverride = require('method-override'),
   errorHandler = require('errorhandler'),
   morgan = require('morgan'),
-  api = require('./index'),
   http = require('http'),
   path = require('path'),
-  firebase = require('firebase'),,
-  voice = require('./twilio/voice')
+  firebase = require('firebase'),
   router = require('./router');
 
 var app = module.exports = express();
@@ -29,6 +28,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 app.use(methodOverride());
+app.options('*', cors());
 
 var env = process.env.NODE_ENV || 'development';
 
@@ -56,13 +56,6 @@ global.db = firebase.database();
  */
 
 app.use('/api', router);
-
-// JSON API
-// app.get('*', api.name);
-app.post('/name', api.post_name);
-app.post('questions/:index?', function(req, res) {
-    return question.question(req, res, db);
-})
 
 /**
  * Start Server
