@@ -55,10 +55,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       };
 
       // Load webcomponentsjs polyfill if browser does not support native Web Components
-      (function() {
+      (() => {
         'use strict';
 
-        var onload = function() {
+        function onload() {
           // For native Imports, manually fire WebComponentsReady so user code
           // can use the same code path for native and polyfill'd imports.
           if (!window.HTMLImports) {
@@ -68,14 +68,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         };
 
-        var webComponentsSupported = (
+        const webComponentsSupported = (
           'registerElement' in document
           && 'import' in document.createElement('link')
           && 'content' in document.createElement('template')
         );
 
         if (!webComponentsSupported) {
-          var script = document.createElement('script');
+          let script = document.createElement('script');
           script.async = true;
           script.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
           script.onload = onload;
@@ -87,7 +87,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       // Load pre-caching Service Worker
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
+        window.addEventListener('load', () => {
           navigator.serviceWorker.register('/service-worker.js');
         });
       }
