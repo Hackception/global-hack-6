@@ -1,7 +1,5 @@
-var express = require('express');
-var firebase = require('firebase');
-var router = express.Router();
-router.route('/cocs')
+var router = require('express').Router();
+router.route('/')
 .post(function(req, res) {
   var newPostKey = global.db.ref().child('cocs').push().key;
   res.json(global.db.ref('cocs/' + newPostKey).set(req.body).key);
