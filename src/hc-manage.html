@@ -2,10 +2,8 @@
 <link rel=import href=shared-styles.html>
 <link rel=import href=../bower_components/iron-pages/iron-pages.html>
 <link rel=import href=../bower_components/iron-selector/iron-selector.html>
-<link rel=import href=elements/hc-manage-coc.html>
-<link rel=import href=elements/hc-manage-location.html>
-<link rel=import href=elements/hc-manage-program.html>
-<link rel=import href=elements/hc-manage-referrals.html>
+<link rel=import href=elements/hc-manage-entity.html>
+<link rel=import href=../../bower_components/iron-ajax/iron-ajax.html>
 
 <dom-module id=hc-manage>
   <template>
@@ -19,29 +17,51 @@
       <h1>Manage</h1>
 
       <iron-selector
-        selected={{_selected}}
+        selected={{__selected}}
         attr-for-selected=name
         >
-        <div name=manage-coc>COC</div>
-        <div name=manage-location>Locations</div>
-        <div name=manage-program>Programs</div>
-        <div name=manage-referrals>Referrals</div>
+        <div name=cocs>COC</div>
+        <div name=locations>Locations</div>
+        <div name=programs>Programs</div>
+        <div name=referrals>Referrals</div>
       </iron-selector>
 
-      <iron-pages
-        attr-for-selected=name
-        selected={{_selected}}
-        >
-        <hc-manage-coc name=manage-coc language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-manage-coc>
-        <hc-manage-location name=manage-location language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-manage-location>
-        <hc-manage-program name=manage-program language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-manage-program>
-        <hc-manage-referrals name=manage-referrals language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-manage-referrals>
-      </iron-pages>
+      <hc-manage-entity
+        language=[[language]]
+        items={{items}}
+        dirty={{__dirty}}
+      ></hc-manage-entity>
+
+      <iron-ajax
+        auto
+        url=[[_getRoute(baseUrl,__selected)]]
+        headers=[[headers]]
+        on-response=_getItems
+      ></iron-ajax>
     </div>
   </template>
   <script>
     Polymer({
-      is: 'hc-manage'
+      is: 'hc-manage',
+      properties: {
+        items: {
+          type: Array,
+          value: () => []
+        },
+        baseUrl: String,
+        __dirty: {
+          type: Boolean,
+          value: false
+        }
+      },
+      _getRoute(baseUrl, selected) {
+        if (this.__dirty) console.error('you have unsaved data...');
+        return this.__dirty ? undefined : `${baseUrl}/${selected}`;
+      },
+      _getItems(event) {
+        const data = event.detail.response;
+        this.set('items', Object.keys(data).map(key => Object.assign({key}, data[key])));
+      },
     });
   </script>
 </dom-module>

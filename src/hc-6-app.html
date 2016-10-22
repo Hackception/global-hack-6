@@ -143,7 +143,7 @@
     ></firebase-app>
     <firebase-auth
       id=auth
-      signed-in={{_isLoggedIn}}
+      signed-in={{__isLoggedIn}}
     ></firebase-auth>
 
     <app-location
@@ -160,11 +160,11 @@
       <!-- Drawer content -->
       <app-drawer id="mainMenu" opened={{_opened}}
         swipe-open>
-        <div class="userInfo" hidden$=[[!_isLoggedIn]]>
+        <div class="userInfo" hidden$=[[!__isLoggedIn]]>
           <iron-image class="avatar" alt="User" src="//placehold.it/150x150"></iron-image>
           <div class="name">Stramel</div>
         </div>
-        <app-toolbar hidden$=[[_isLoggedIn]]>Menu</app-toolbar>
+        <app-toolbar hidden$=[[__isLoggedIn]]>Menu</app-toolbar>
         <iron-selector
           selected=[[page]]
           attr-for-selected=name
@@ -179,8 +179,8 @@
           <a name=user-lookup href=/user-lookup>User Lookup</a>
         </iron-selector>
         <div class="login">
-          <paper-button class="primary" hidden$=[[_isLoggedIn]] on-click=login>[[localize('hc-6-app-login')]]</paper-button>
-          <paper-button class="primary" hidden$=[[!_isLoggedIn]] on-click=logout>[[localize('hc-6-app-logout')]]</paper-button>
+          <paper-button class="primary" hidden$=[[__isLoggedIn]] on-click=login>[[localize('hc-6-app-login')]]</paper-button>
+          <paper-button class="primary" hidden$=[[!__isLoggedIn]] on-click=logout>[[localize('hc-6-app-logout')]]</paper-button>
         </div>
       </app-drawer>
       <!-- Main content -->
@@ -277,7 +277,7 @@
       properties: {
         baseUrl: {
           type: String,
-          value: 'http://localhost:3000/api'
+          value: 'https://immense-coast-46077.herokuapp.com/api'
         },
         headers: {
           type: Object,
@@ -297,7 +297,7 @@
           type: String,
           reflectToAttribute: true
         },
-        _isLoggedIn: {
+        __isLoggedIn: {
           type: Boolean,
           value: false
         },

@@ -1,0 +1,76 @@
+<link rel=import href=../../bower_components/polymer/polymer.html>
+<link rel=import href=../shared-styles.html>
+<link rel=import href=./hc-contact-info.html>
+<link rel=import href=../../bower_components/iron-collapse/iron-collapse.html>
+
+<dom-module id=hc-manage-entity>
+  <template>
+    <style include=shared-styles>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <!-- <hc-contact-info language=[[language]]></hc-contact-info> -->
+    <template
+      id=repeat
+      is=dom-repeat
+      items={{items}}>
+      <div
+        class=title
+        id$=overlay-title-[[index]]
+        on-click=_toggleOverlay>
+        [[item.name]]
+      </div>
+      <iron-collapse id$=overlay-[[index]]>
+        <div class=dropdown-content no-overlap>
+          <template
+            is=dom-if
+            if=[[!hideContactInfo]]>
+            <hc-contact-info
+              language=[[language]]
+              address={{item.contactInfo.address}}
+              phone-number={{item.contactInfo.phoneNumber}}
+              email={{item.contactInfo.email}}
+              fax={{item.contactInfo.fax}}
+            ></hc-contact-info>
+          </template>
+        </div>
+      </iron-collapse>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: 'hc-manage-entity',
+      properties: {
+        baseUrl: String,
+        headers: Object,
+        items: Array,
+        language: Object,
+        hideContactInfo: {
+          type: Boolean,
+          value: false
+        },
+        __currentlyOpened: Object,
+        dirty: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          computed: '_dirtyCheck(items.*)'
+        }
+      },
+      _dirtyCheck(changeRecord) {
+        console.log(changeRecord, changeRecord.path !== 'items');
+        return changeRecord.path !== 'items';
+      },
+      _toggleOverlay(event) {
+        const index = event.model.index;
+        const target = this.$$(`#overlay-${index}`);
+        if (this.__currentlyOpened && this.__currentlyOpened.id !== target.id && this.__currentlyOpened.hide)
+          this.__currentlyOpened.hide();
+        this.set('__currentlyOpened', target);
+        target.toggle();
+      }
+    });
+  </script>
+</dom-module>
