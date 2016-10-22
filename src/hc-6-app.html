@@ -11,6 +11,7 @@
 <link rel=import href=../bower_components/app-layout/app-toolbar/app-toolbar.html>
 <link rel=import href=../bower_components/paper-icon-button/paper-icon-button.html>
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel=import href=../bower_components/iron-pages/iron-pages.html>
 <link rel=import href=../bower_components/iron-selector/iron-selector.html>
 <link rel=import href=../bower_components/app-localize-behavior/app-localize-behavior.html>
@@ -39,8 +40,39 @@
         --paper-icon-button-ink-color: var(--text-primary-color);
       }
 
-      app-toolbar > paper-icon-button {
+      app-toolbar paper-icon-button {
         margin-right: 8px;
+      }
+
+      .avatar {
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+        display: block;
+      }
+      #mainMenu .userInfo:not([hidden]) {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        background-color: var(--dark-primary-color);
+        color: var(--text-primary-color);
+        padding: 16px;
+      }
+      #mainMenu .name {
+        margin-top: 16px;
+        font-size: var(30px);
+        letter-spacing: 1px;
+        font-weight: bold;
+      }
+
+      form#search > * {
+        display: inline-block;
+      }
+
+      paper-icon-button[hidden] {
+        display: none;
       }
 
       app-drawer app-toolbar{
@@ -53,10 +85,6 @@
         --paper-progress-active-color: var(--default-primary-color);
       }
 
-
-      .drawer-list {
-        /*margin: 0 20px;*/
-      }
       .drawer-list a {
         display: block;
         padding: 0 16px;
@@ -71,6 +99,20 @@
       }
       .drawer-list a.subroute {
         padding-left: 32px;
+      }
+
+      .login {
+        text-align: center;
+        padding: 16px;
+      }
+      .login paper-button {
+        --paper-button:{
+          background-color: var(--accent-color);
+          color: var(--text-primary-color);
+        };
+      }
+      [hidden] {
+        display: none;
       }
     </style>
 
@@ -92,6 +134,7 @@
     <firebase-auth
       id=auth
       app-name=hc-app
+      signed-in={{_isLoggedIn}}
     ></firebase-auth>
 
     <app-location
@@ -108,9 +151,11 @@
       <!-- Drawer content -->
       <app-drawer id="mainMenu" opened={{_opened}}
         swipe-open>
-        <app-toolbar>Menu</app-toolbar>
-        <paper-button hidden$=[[_isLoggedIn]] raised on-click=login>[[localize('hc-6-app-login')]]</paper-button>
-        <paper-button hidden$=[[!_isLoggedIn]] raised on-click=logout>[[localize('hc-6-app-logout')]]</paper-button>
+        <div class="userInfo" hidden$=[[!_isLoggedIn]]>
+          <iron-image class="avatar" alt="User" src="//placehold.it/150x150"></iron-image>
+          <div class="name">Stramel</div>
+        </div>
+        <app-toolbar hidden$=[[_isLoggedIn]]>Menu</app-toolbar>
         <iron-selector
           selected=[[page]]
           attr-for-selected=name
@@ -124,6 +169,10 @@
           <a name=reporting href=/reporting>Reporting</a>
           <a name=user-lookup href=/user-lookup>User Lookup</a>
         </iron-selector>
+        <div class="login">
+          <paper-button hidden$=[[_isLoggedIn]] on-click=login>[[localize('hc-6-app-login')]]</paper-button>
+          <paper-button hidden$=[[!_isLoggedIn]] on-click=logout>[[localize('hc-6-app-logout')]]</paper-button>
+        </div>
       </app-drawer>
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
@@ -138,13 +187,34 @@
               drawer-toggle
             ></paper-icon-button>
             <div main-title>Homeless Management</div>
+
+            <form is="iron-form" id="search"
+              novalidate
+              required
+              auto-validate
+              on-submit="_submitSearch(event)"
+              hidden$="{{__hideSearch}}">
+              <paper-input
+                tabindex="0"
+                label="Search..."
+                no-label-float
+              ></paper-input>
+              <paper-icon-button
+                icon=search
+                on-blur="_toggleSearch"
+              ></paper-icon-button>
+            </form>
+
             <paper-icon-button
               icon=search
-              onclick="document.getElementById('endDrawer').toggle();"
+              hidden$="{{!__hideSearch}}"
+              on-click="_toggleSearch"
             ></paper-icon-button>
-            <paper-progress id="lazyLoading"
+
+            <paper-progress
               indeterminate
               bottom-item
+              hidden$="[[__hideIndicator]]"
             ></paper-progress>
           </app-toolbar>
         </app-header>
@@ -204,14 +274,17 @@
         },
         _isLoggedIn: {
           type: Boolean,
-          value: () => Boolean(sessionStorage.user)
+          value: false
+        },
+        __hideSearch: {
+          type: Boolean,
+          value: true
         }
       },
       observers: [
         '_routePageChanged(routeData.page)',
         '_computePageName(page, appVersion)'
       ],
-
       // Lifecycle Hooks
       ready() {
         this._hideLoadingIndicator();
@@ -227,14 +300,11 @@
         this.$['login-dialog'].open();
       },
       logout() {
-        this._isLoggedIn = false;
-        delete sessionStorage.user;
+        this.$.auth.signOut();
       },
       _login() {
         this.$.auth.signInWithEmailAndPassword(this._email, this._password).
-          then(response => {
-            sessionStorage.user = JSON.stringify(response);
-            this._isLoggedIn = true;
+          then(() => {
             this._email = '';
             this._password = '';
           });
@@ -245,7 +315,7 @@
       },
       _computePageName(page, appVersion) {
         // Load page import on demand. Show 404 page if fails
-        this.$.lazyLoading.style.display = 'block';
+        this.__hideIndicator = false;
         if (this.$.mainMenu.opened) {
           this.$.mainMenu.toggle();
         }
@@ -257,11 +327,22 @@
         this.page = '404';
       },
       _hideLoadingIndicator() {
-        this.$.lazyLoading.style.display = 'none';
+        this.__hideIndicator = true;
       },
 
+
+      // Search
+      _toggleSearch() {
+        this.__hideSearch = !this.__hideSearch;
+      },
+      _submitSearch() {
+        console.log('searching!');
+        this._toggleSearch();
+      },
+
+
       // Auth
-      _handleAuthChange(event) {
+      _handleAuthChange() {
         // const status = event.detail.statusKnown;
         // if (status) {
         //   // if admin -> admin
