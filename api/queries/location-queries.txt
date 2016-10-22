@@ -189,6 +189,9 @@ firebase.database().ref('programs/' + programID).set({
   programs : {
     programId : true,
     programId2 : true
+  },
+  locations : {
+    locationId : true
   }
 }
 
