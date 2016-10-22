@@ -13,6 +13,7 @@
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel=import href=../bower_components/iron-pages/iron-pages.html>
 <link rel=import href=../bower_components/iron-selector/iron-selector.html>
+<link rel=import href=../bower_components/app-localize-behavior/app-localize-behavior.html>
 
 <link rel=import href=app-theme.html>
 
@@ -60,6 +61,7 @@
       }
     </style>
 
+    <h1>[[localize('test')]]</h1>
     <!-- <google-analytics-loader
       api-ready="{{_analyticsReady}}"
     ></google-analytics-loader>
@@ -165,7 +167,14 @@
   <script>
     Polymer({
       is: 'hc-6-app',
+      behaviors: [
+        Polymer.AppLocalizeBehavior
+      ],
       properties: {
+        language: {
+          type: String,
+          value: 'en'
+        },
         appVersion: {
           type: String,
           value: 'dev'
@@ -185,6 +194,9 @@
         // Sign in Anonymous
         // if (this.)
         // this.$.auth
+      },
+      attached() {
+        this.loadResources(this.resolveUrl('../data/locales.json'));
       },
 
 

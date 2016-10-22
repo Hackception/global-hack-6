@@ -2,8 +2,12 @@
 "cocID" : {
   name: '',
   contactInfo: {
-    geolocation: '',
-    address: '',
+    address: {
+      street: '',
+      city: '',
+      state: '',
+      zip: ''
+    },
     phoneNumber: '',
     email: '',
     fax: ''
@@ -25,8 +29,12 @@ var cocID = firebase.database().ref().child('cocs').push().key;
 firebase.database().ref('cocs/' + cocID).set({
   name: '',
   contactInfo: {
-    geolocation: '',
-    address: '',
+    address: {
+      street: '',
+      city: '',
+      state: '',
+      zip: ''
+    },
     phoneNumber: '',
     email: '',
     fax: ''
@@ -51,8 +59,12 @@ firebase.database().ref('cocs/' + cocID).set({
   name: '',
   capacity : 0,
   contactInfo: {
-    geolocation: '',
-    address: '',
+    address: {
+      street: '',
+      city: '',
+      state: '',
+      zip: ''
+    },
     phoneNumber: '',
     email: '',
     fax: ''
@@ -79,8 +91,12 @@ firebase.database().ref('locations/' + locationID).set({
   name: '',
   capacity : 0,
   contactInfo: {
-    geolocation: '',
-    address: '',
+    address: {
+      street: '',
+      city: '',
+      state: '',
+      zip: ''
+    },
     phoneNumber: '',
     email: '',
     fax: ''
@@ -106,8 +122,12 @@ firebase.database().ref('locations/' + locationID).set({
 "programId" : {
   name: '',
   contactInfo: {
-    geolocation: '',
-    address: '',
+    address: {
+      street: '',
+      city: '',
+      state: '',
+      zip: ''
+    },
     phoneNumber: '',
     email: '',
     fax: ''
@@ -130,8 +150,12 @@ var programID = firebase.database().ref().child('programs').push().key;
 firebase.database().ref('programs/' + programID).set({
   name: '',
   contactInfo: {
-    geolocation: '',
-    address: '',
+    address: {
+      street: '',
+      city: '',
+      state: '',
+      zip: ''
+    },
     phoneNumber: '',
     email: '',
     fax: ''

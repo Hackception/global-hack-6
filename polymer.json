@@ -13,7 +13,8 @@
   "sourceGlobs": [
    "src/**/*",
    "images/**/*",
-   "bower.json"
+   "bower.json",
+   "data/**/*"
   ],
   "includeDependencies": [
     "bower_components/webcomponentsjs/webcomponents-lite.min.js",
