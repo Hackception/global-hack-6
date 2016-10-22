@@ -6,6 +6,11 @@
     "contact-info-address-zip": "Enter Zip",
     "contact-info-email": "Enter Email",
     "contact-info-fax": "Enter Fax",
-    "contact-info-phone-number": "Enter Phone Number"
+    "contact-info-phone-number": "Enter Phone Number",
+    "hc-6-app-email": "Email",
+    "hc-6-app-password": "Password",
+    "hc-6-app-cancel": "Cancel",
+    "hc-6-app-login": "Login",
+    "hc-6-app-logout": "Logout"
   }
 }
