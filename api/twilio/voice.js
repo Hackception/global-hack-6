@@ -1,3 +1,27 @@
+/*
+The MIT License (MIT)
+
+Copyright (c) 2015 Twilio Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+
 var enums = require('../constants/enums'),
     questionPath = require('../constants/question-path'),
     twilio = require('twilio'),
@@ -10,7 +34,7 @@ exports.question = function(req, res) {
     var twiml = new twilio.TwimlResponse();
     var previousNode;
     if (currentIndex) {
-      previousNode = questionPath[currentIndex];
+        previousNode = questionPath[currentIndex];
     }
 
     // helper to append a new "Say" verb with alice voice
@@ -46,6 +70,10 @@ exports.question = function(req, res) {
             return respond();
         }
 
+        twiml.pause({
+          length: 3
+        });
+
         var nextIndex;
 
         if (index === 0) { // first hit
@@ -55,7 +83,7 @@ exports.question = function(req, res) {
 
         var node = questionPath[index];
         var question = node.question;
-        var action = '/questions/' + index;
+        var action = '/api/questions/' + index;
 
         say(question.text);
 
@@ -68,17 +96,16 @@ exports.question = function(req, res) {
         } else if (question.type === enums.questionTypes.SWITCH) {
             for (var button in node.values) {
                 say('Press ' + button + ' for ' + node.values[button].name + '.');
-                twiml.gather({
-                    action: action,
-                    timeout: question.timeout,
-                    numDigits: 1
-                });
             }
+            twiml.gather({
+                action: action,
+                timeout: question.timeout,
+                numDigits: 1
+            });
         } else { // TEXT
             say('Please record your response after the beep. Press any key to finish.');
             twiml.record({
                 action: action,
-                timeout: question.timeout,
                 // TODO uncomment when ready for transcription
                 //transcribe: true,
                 //transcribeCallback: '/voice/' + surveyres._id +
