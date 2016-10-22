@@ -92,6 +92,7 @@
     <firebase-auth
       id=auth
       app-name=hc-app
+      signed-in={{_isLoggedIn}}
     ></firebase-auth>
 
     <app-location
@@ -204,14 +205,13 @@
         },
         _isLoggedIn: {
           type: Boolean,
-          value: () => Boolean(sessionStorage.user)
+          value: false
         }
       },
       observers: [
         '_routePageChanged(routeData.page)',
         '_computePageName(page, appVersion)'
       ],
-
       // Lifecycle Hooks
       ready() {
         this._hideLoadingIndicator();
@@ -227,14 +227,11 @@
         this.$['login-dialog'].open();
       },
       logout() {
-        this._isLoggedIn = false;
-        delete sessionStorage.user;
+        this.$.auth.signOut();
       },
       _login() {
         this.$.auth.signInWithEmailAndPassword(this._email, this._password).
           then(response => {
-            sessionStorage.user = JSON.stringify(response);
-            this._isLoggedIn = true;
             this._email = '';
             this._password = '';
           });
