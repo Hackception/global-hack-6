@@ -11,9 +11,14 @@
     "url": "https://github.com/PolymerElements/generator-polymer-init-custom-build/issues"
   },
   "engines": {
-    "node": ">=4.0"
+    "node": "^6.9.1"
   },
-  "private": true,
+  "dependencies": {
+    "express": "^4.14.0",
+    "cors": "^2.8.1",
+    "firebase": "^3.5.1",
+    "twilio": "^2.11.0"
+  },
   "devDependencies": {
     "autoprefixer": "^6.5.1",
     "babel-plugin-array-includes": "^2.0.3",
@@ -22,7 +27,6 @@
     "cssnano": "^3.7.7",
     "del": "^2.2.1",
     "errorhandler": "1.4.2",
-    "express": "^4.14.0",
     "gulp": "gulpjs/gulp#4.0",
     "gulp-babel": "^6.1.2",
     "gulp-htmlmin": "^3.0.0",
@@ -36,10 +40,6 @@
     "plylog": "^0.4.0",
     "polymer-build": "^0.4.0",
     "postcss": "^5.2.5",
-    "twilio": "^2.11.0"
   },
-  "dependencies": {
-    "cors": "^2.8.1",
-    "firebase": "^3.5.1"
-  }
+  "private": true
 }
