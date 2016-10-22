@@ -1,0 +1,57 @@
+"cocID" : {
+  name: '',
+  contactInfo: {
+    geolocation: '',
+    address: '',
+    phoneNumber: '',
+    email: '',
+    fax: ''
+  },
+  locations : {
+    locationId : true,
+    locationId2 : true,
+  },
+  intakeData : {
+    intakeId : true,
+    intakeId2 : true
+  },
+  members : {
+    memberId1 : true,
+    memberId2 : true
+  }
+}
+var cocID = firebase.database().ref().child('cocs').push().key;
+firebase.database().ref('cocs/' + cocID).set({
+  name: '',
+  contactInfo: {
+    geolocation: '',
+    address: '',
+    phoneNumber: '',
+    email: '',
+    fax: ''
+  },
+  locations : {
+    locationId : true,
+    locationId2 : true,
+  },
+  intakeData : {
+    intakeId : true,
+    intakeId2 : true
+  },
+  members : {
+    memberId1 : true,
+    memberId2 : true
+  }
+});
+
+intake-data : [
+  {
+    intake-question-id : intake-question-1,
+    constraint : true,
+    constraint-date : date,
+    constraint-date-range : range,
+    constraint-boolean : boolean,
+    constraint-enum : [{enum-option}],
+    constraint-number : number,
+  }
+]
