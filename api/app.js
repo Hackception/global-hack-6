@@ -3,15 +3,16 @@
  */
 
 var express = require('express'),
-    bodyParser = require('body-parser'),
-    methodOverride = require('method-override'),
-    errorHandler = require('errorhandler'),
-    morgan = require('morgan'),
-    api = require('./index'),
-    http = require('http'),
-    path = require('path'),
-    firebase = require('firebase'),
-    voice = require('./twilio/voice');
+  bodyParser = require('body-parser'),
+  methodOverride = require('method-override'),
+  errorHandler = require('errorhandler'),
+  morgan = require('morgan'),
+  api = require('./index'),
+  http = require('http'),
+  path = require('path'),
+  firebase = require('firebase'),,
+  voice = require('./twilio/voice')
+  router = require('./router');
 
 var app = module.exports = express();
 
@@ -48,30 +49,16 @@ if (env === 'production') {
    serviceAccount: "api/constants/global-hack-6-400ea30c06bf.json",
    databaseURL: "https://global-hack-6.firebaseio.com"
  });
-var db = firebase.database();
+global.db = firebase.database();
 
 /**
  * Routes
  */
 
-var router = express.Router();
-
-router.route('/cocs')
-.post(function(req, res) {
-  var newPostKey = db.ref().child('cocs').push().key;
-  res.json(db.ref('cocs/' + newPostKey).set(req.body).key);
-})
-.get(function(req, res) {
-  db.ref('cocs/').once('value').then(function(snapshot) {
-    res.json(snapshot.val());
-  });
-})
-;
-
 app.use('/api', router);
 
 // JSON API
-app.get('*', api.name);
+// app.get('*', api.name);
 app.post('/name', api.post_name);
 app.post('questions/:index?', function(req, res) {
     return question.question(req, res, db);
