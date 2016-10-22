@@ -116,6 +116,10 @@ firebase.database().ref('locations/' + locationID).set({
     locationId : true,
     locationId2 : true,
   },
+  services : {
+    serviceId : true,
+    serviceId2 : true
+  },
   intakeData : {
     intakeId : true,
     intakeId2 : true
@@ -140,6 +144,10 @@ firebase.database().ref('programs/' + programID).set({
     locationId : true,
     locationId2 : true,
   },
+  services : {
+    serviceId : true,
+    serviceId2 : true
+  },
   intakeData : {
     intakeId : true,
     intakeId2 : true
@@ -150,14 +158,22 @@ firebase.database().ref('programs/' + programID).set({
   },
 });
 
-intake-data : [
-  {
-    intake-question-id : intake-question-1,
-    constraint : true,
-    constraint-date : date,
-    constraint-date-range : range,
-    constraint-boolean : boolean,
-    constraint-enum : [{enum-option}],
-    constraint-number : number,
+//services
+"serviceId" : {
+  name: '',
+  description: '',
+  programs : {
+    programId : true,
+    programId2 : true
   }
-]
+}
+
+var serviceID = firebase.database().ref().child('services').push().key;
+firebase.database().ref('services/' + serviceID).set({
+  name: '',
+  description: '',
+  programs : {
+    programId : true,
+    programId2 : true
+  }
+});
