@@ -13,24 +13,25 @@
 <link rel=import href=../bower_components/iron-pages/iron-pages.html>
 <link rel=import href=../bower_components/iron-selector/iron-selector.html>
 <link rel=import href=../bower_components/iron-selector/iron-selector.html>
-<link rel=import href=../bower_components/platinum-sw/platinum-sw-register.html>
-<link rel=import href=../bower_components/platinum-sw/platinum-sw-offline-analytics.html>
-<link rel=import href=../bower_components/google-analytics/google-analytics-loader.html>
+
+<link rel=import href=app-theme.html>
+
+<!-- <link rel=import href=../bower_components/platinum-sw/platinum-sw-register.html> -->
+<!-- <link rel=import href=../bower_components/platinum-sw/platinum-sw-offline-analytics.html> -->
+<!-- <link rel=import href=../bower_components/google-analytics/google-analytics-loader.html> -->
 
 <dom-module id=hc-6-app>
   <template>
     <style>
       :host {
         display: block;
-        --app-primary-color: #4285f4;
-        --app-secondary-color: black;
       }
       app-header {
-        background-color: var(--app-primary-color);
-        color: #fff;
+        background-color: var(--default-primary-color);
+        color: var(--text-primary-color);
       }
       app-header paper-icon-button {
-        --paper-icon-button-ink-color: white;
+        --paper-icon-button-ink-color: var(--text-primary-color);
       }
       .drawer-list {
         margin: 0 20px;
@@ -40,10 +41,10 @@
         padding: 0 16px;
         line-height: 40px;
         text-decoration: none;
-        color: var(--app-secondary-color);
+        color: var(--primary-background-color);
       }
       .drawer-list a.iron-selected {
-        color: black;
+        color: var(--accent-color);
         font-weight: bold;
       }
       .drawer-list a.subroute {
@@ -51,9 +52,13 @@
       }
     </style>
 
-    <google-analytics-loader
+    <!-- <google-analytics-loader
       api-ready="{{_analyticsReady}}"
     ></google-analytics-loader>
+    <platinum-sw-register auto-register>
+      <platinum-sw-offline-analytics></platinum-sw-offline-analytics>
+    </platinum-sw-register> -->
+
     <firebase-app
        api-key="AIzaSyB31LHiV6XdxiAEl2UuFwgdbS5CQ_nIfiQ"
        auth-domain="global-hack-6.firebaseapp.com"
@@ -68,9 +73,7 @@
       on-error="_handleError"
     ></firebase-auth>
 
-    <platinum-sw-register auto-register>
-      <platinum-sw-offline-analytics></platinum-sw-offline-analytics>
-    </platinum-sw-register>
+
 
     <app-location
       route={{route}}
@@ -140,6 +143,11 @@
           role=main
           >
           <hc-home name=home></hc-home>
+          <hc-intake name=intake></hc-intake>
+          <hc-location-lookup name=location-lookup></hc-location-lookup>
+          <hc-manage name=manage></hc-manage>
+          <hc-reporting name=reporting></hc-reporting>
+          <hc-user-lookup name=user-lookup></hc-user-lookup>
           <hc-404 name=404></hc-404>
         </iron-pages>
       </app-header-layout>
@@ -187,13 +195,13 @@
 
       // Auth
       _handleAuthChange(event) {
-        const status = event.detail.statusKnown;
-        if (status) {
-          // if admin -> admin
-          // else user
-        } else {
-          this.page = 'login';
-        }
+        // const status = event.detail.statusKnown;
+        // if (status) {
+        //   // if admin -> admin
+        //   // else user
+        // } else {
+        //   this.page = 'login';
+        // }
       }
 
     });
