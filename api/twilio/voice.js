@@ -55,7 +55,7 @@ exports.question = function(req, res) {
 
         var node = questionPath[index];
         var question = node.question;
-        var action = '/questions/' + index;
+        var action = '/api/questions/' + index;
 
         say(question.text);
 
@@ -68,12 +68,12 @@ exports.question = function(req, res) {
         } else if (question.type === enums.questionTypes.SWITCH) {
             for (var button in node.values) {
                 say('Press ' + button + ' for ' + node.values[button].name + '.');
-                twiml.gather({
-                    action: action,
-                    timeout: question.timeout,
-                    numDigits: 1
-                });
             }
+            twiml.gather({
+                action: action,
+                timeout: question.timeout,
+                numDigits: 1
+            });
         } else { // TEXT
             say('Please record your response after the beep. Press any key to finish.');
             twiml.record({
