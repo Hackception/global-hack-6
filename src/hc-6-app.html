@@ -100,6 +100,20 @@
       .drawer-list a.subroute {
         padding-left: 32px;
       }
+
+      .login {
+        text-align: center;
+        margin-top: 16px;
+      }
+      .login paper-button {
+        --paper-button:{
+          background-color: var(--accent-color);
+          color: var(--text-primary-color);
+        };
+      }
+      [hidden] {
+        display: none;
+      }
     </style>
 
     <!-- <google-analytics-loader
@@ -137,16 +151,10 @@
       <!-- Drawer content -->
       <app-drawer id="mainMenu" opened={{_opened}}
         swipe-open>
-<<<<<<< HEAD
-        <div class="userInfo">
+        <div class="userInfo" hidden$=[[_isLoggedIn]]>
           <iron-image class="avatar" alt="User" src="//placehold.it/150x150"></iron-image>
           <div class="name">Stramel</div>
         </div>
-=======
-        <app-toolbar>Menu</app-toolbar>
-        <paper-button hidden$=[[_isLoggedIn]] raised on-click=login>[[localize('hc-6-app-login')]]</paper-button>
-        <paper-button hidden$=[[!_isLoggedIn]] raised on-click=logout>[[localize('hc-6-app-logout')]]</paper-button>
->>>>>>> fc7263a70175cdcd12136d607611d0130c49a757
         <iron-selector
           selected=[[page]]
           attr-for-selected=name
@@ -160,6 +168,10 @@
           <a name=reporting href=/reporting>Reporting</a>
           <a name=user-lookup href=/user-lookup>User Lookup</a>
         </iron-selector>
+        <div class="login">
+          <paper-button hidden$=[[_isLoggedIn]] raised on-click=login>[[localize('hc-6-app-login')]]</paper-button>
+          <paper-button hidden$=[[!_isLoggedIn]] raised on-click=logout>[[localize('hc-6-app-logout')]]</paper-button>
+        </div>
       </app-drawer>
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
