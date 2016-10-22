@@ -44,15 +44,31 @@ if (env === 'production') {
 /**
  * Firebase set up
  */
-firebase.initializeApp({
-    serviceAccount: "constants/global-hack-6-d470454bd9b9.json",
-    databaseURL: "https://global-hack-6.firebaseio.com"
-});
+ firebase.initializeApp({
+   serviceAccount: "api/constants/global-hack-6-400ea30c06bf.json",
+   databaseURL: "https://global-hack-6.firebaseio.com"
+ });
 var db = firebase.database();
 
 /**
  * Routes
  */
+
+var router = express.Router();
+
+router.route('/cocs')
+.post(function(req, res) {
+  var newPostKey = db.ref().child('cocs').push().key;
+  res.json(db.ref('cocs/' + newPostKey).set(req.body).key);
+})
+.get(function(req, res) {
+  db.ref('cocs/').once('value').then(function(snapshot) {
+    res.json(snapshot.val());
+  });
+})
+;
+
+app.use('/api', router);
 
 // JSON API
 app.get('*', api.name);

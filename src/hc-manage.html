@@ -1,7 +1,8 @@
 <link rel=import href=../bower_components/polymer/polymer.html>
 <link rel=import href=shared-styles.html>
+<link rel=import href=elements/hc-manage-coc.html>
 
-<dom-module id=hc-home>
+<dom-module id=hc-manage>
   <template>
     <style include=shared-styles>
       :host {
@@ -10,12 +11,14 @@
     </style>
 
     <div class=card>
-      <h1>Home</h1>
+      <h1>Manage</h1>
+
+      <hc-manage-coc language=[[language]]></hc-manage-coc>
     </div>
   </template>
   <script>
     Polymer({
-      is: 'hc-home'
+      is: 'hc-manage'
     });
   </script>
 </dom-module>

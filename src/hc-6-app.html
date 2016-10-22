@@ -10,40 +10,60 @@
 <link rel=import href=../bower_components/app-layout/app-header-layout/app-header-layout.html>
 <link rel=import href=../bower_components/app-layout/app-toolbar/app-toolbar.html>
 <link rel=import href=../bower_components/paper-icon-button/paper-icon-button.html>
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel=import href=../bower_components/iron-pages/iron-pages.html>
 <link rel=import href=../bower_components/iron-selector/iron-selector.html>
-<link rel=import href=../bower_components/iron-selector/iron-selector.html>
-<link rel=import href=../bower_components/platinum-sw/platinum-sw-register.html>
-<link rel=import href=../bower_components/platinum-sw/platinum-sw-offline-analytics.html>
-<link rel=import href=../bower_components/google-analytics/google-analytics-loader.html>
+<link rel=import href=../bower_components/app-localize-behavior/app-localize-behavior.html>
+<link rel=import href=../bower_components/paper-progress/paper-progress.html>
+
+<link rel=import href=app-theme.html>
+
+<!-- <link rel=import href=../bower_components/platinum-sw/platinum-sw-register.html> -->
+<!-- <link rel=import href=../bower_components/platinum-sw/platinum-sw-offline-analytics.html> -->
+<!-- <link rel=import href=../bower_components/google-analytics/google-analytics-loader.html> -->
 
 <dom-module id=hc-6-app>
   <template>
-    <style>
+    <style include="app-theme">
       :host {
         display: block;
-        --app-primary-color: #4285f4;
-        --app-secondary-color: black;
       }
       app-header {
-        background-color: var(--app-primary-color);
-        color: #fff;
+        background-color: var(--text-primary-color);
+        color: var(--primary-text-color);
       }
       app-header paper-icon-button {
-        --paper-icon-button-ink-color: white;
+        --paper-icon-button-ink-color: var(--text-primary-color);
       }
+
+      app-toolbar > paper-icon-button {
+        margin-right: 8px;
+      }
+
+      app-drawer app-toolbar{
+        background-color: var(--default-primary-color);
+        color: var(--text-primary-color);
+      }
+      paper-progress {
+        display: block;
+        width: 100%;
+        --paper-progress-active-color: var(--default-primary-color);
+      }
+
+
       .drawer-list {
-        margin: 0 20px;
+        /*margin: 0 20px;*/
       }
       .drawer-list a {
         display: block;
         padding: 0 16px;
-        line-height: 40px;
+        line-height: 50px;
         text-decoration: none;
-        color: var(--app-secondary-color);
+        color: var(--primary-text-color);
+        border-bottom: 1px solid var(--divider-color);
       }
       .drawer-list a.iron-selected {
-        color: black;
+        color: var(--accent-color);
         font-weight: bold;
       }
       .drawer-list a.subroute {
@@ -51,9 +71,12 @@
       }
     </style>
 
-    <google-analytics-loader
+    <!-- <google-analytics-loader
       api-ready="{{_analyticsReady}}"
     ></google-analytics-loader>
+    <platinum-sw-register auto-register>
+      <platinum-sw-offline-analytics></platinum-sw-offline-analytics>
+    </platinum-sw-register> -->
 
     <firebase-app
        api-key="AIzaSyB31LHiV6XdxiAEl2UuFwgdbS5CQ_nIfiQ"
@@ -69,9 +92,7 @@
       on-error="_handleError"
     ></firebase-auth>
 
-    <platinum-sw-register auto-register>
-      <platinum-sw-offline-analytics></platinum-sw-offline-analytics>
-    </platinum-sw-register>
+
 
     <app-location
       route={{route}}
@@ -83,9 +104,10 @@
       tail={{subroute}}
     ></app-route>
 
-    <app-drawer-layout fullbleed>
+    <app-drawer-layout fullbleed force-narrow>
       <!-- Drawer content -->
-      <app-drawer>
+      <app-drawer id="mainMenu"
+        swipe-open>
         <app-toolbar>Menu</app-toolbar>
         <iron-selector
           selected=[[page]]
@@ -97,6 +119,26 @@
             name=home
             href=/home
           >Home</a>
+          <a
+            name=intake
+            href=/intake
+          >Intake</a>
+          <a
+            name=location-lookup
+            href=/location-lookup
+          >Location Lookup</a>
+          <a
+            name=manage
+            href=/manage
+          >Manage</a>
+          <a
+            name=reporting
+            href=/reporting
+          >Reporting</a>
+          <a
+            name=user-lookup
+            href=/user-lookup
+          >User Lookup</a>
         </iron-selector>
       </app-drawer>
       <!-- Main content -->
@@ -111,7 +153,15 @@
               icon=menu
               drawer-toggle
             ></paper-icon-button>
-            <div main-title>Homeless Management Information System</div>
+            <div main-title>Homeless Management</div>
+            <paper-icon-button
+              icon=search
+              onclick="document.getElementById('endDrawer').toggle();"
+            ></paper-icon-button>
+            <paper-progress id="lazyLoading"
+              indeterminate
+              bottom-item
+            ></paper-progress>
           </app-toolbar>
         </app-header>
         <iron-pages
@@ -120,8 +170,13 @@
           fallback-selection=404
           role=main
           >
-          <hc-home name=home></hc-home>
-          <hc-404 name=404></hc-404>
+          <hc-home name=home language=[[language]]></hc-home>
+          <hc-intake name=intake language=[[language]]></hc-intake>
+          <hc-location-lookup name=location-lookup language=[[language]]></hc-location-lookup>
+          <hc-manage name=manage language=[[language]]></hc-manage>
+          <hc-reporting name=reporting language=[[language]]></hc-reporting>
+          <hc-user-lookup name=user-lookup language=[[language]]></hc-user-lookup>
+          <hc-404 name=404 language=[[language]]></hc-404>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
@@ -130,7 +185,14 @@
   <script>
     Polymer({
       is: 'hc-6-app',
+      behaviors: [
+        Polymer.AppLocalizeBehavior
+      ],
       properties: {
+        language: {
+          type: String,
+          value: 'en'
+        },
         appVersion: {
           type: String,
           value: 'dev'
@@ -147,9 +209,13 @@
 
       // Lifecycle Hooks
       ready() {
+        this._hideLoadingIndicator();
         // Sign in Anonymous
         // if (this.)
         // this.$.auth
+      },
+      attached() {
+        this.loadResources(this.resolveUrl('../data/locales.json'));
       },
 
 
@@ -159,22 +225,30 @@
       },
       _computePageName(page, appVersion) {
         // Load page import on demand. Show 404 page if fails
+        this.$.lazyLoading.style.display = 'block';
+        if (this.$.mainMenu.opened) {
+          this.$.mainMenu.toggle();
+        }
+
         const resolvedPageUrl = this.resolveUrl(`hc-${page}.html?v=${appVersion}`);
-        this.importHref(resolvedPageUrl, null, this._showPage404, true);
+        this.importHref(resolvedPageUrl, this._hideLoadingIndicator, this._showPage404, true);
       },
       _showPage404() {
         this.page = '404';
       },
+      _hideLoadingIndicator() {
+        this.$.lazyLoading.style.display = 'none';
+      },
 
       // Auth
       _handleAuthChange(event) {
-        const status = event.detail.statusKnown;
-        if (status) {
-          // if admin -> admin
-          // else user
-        } else {
-          this.page = 'login';
-        }
+        // const status = event.detail.statusKnown;
+        // if (status) {
+        //   // if admin -> admin
+        //   // else user
+        // } else {
+        //   this.page = 'login';
+        // }
       }
 
     });

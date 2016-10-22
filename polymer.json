@@ -3,12 +3,18 @@
   "shell": "src/hc-6-app.html",
   "fragments": [
     "src/hc-home.html",
+    "src/hc-intake.html",
+    "src/hc-location-lookup.html",
+    "src/hc-manage.html",
+    "src/hc-reporting.html",
+    "src/hc-user-lookup.html",
     "src/hc-404.html"
   ],
   "sourceGlobs": [
    "src/**/*",
    "images/**/*",
-   "bower.json"
+   "bower.json",
+   "data/**/*"
   ],
   "includeDependencies": [
     "bower_components/webcomponentsjs/webcomponents-lite.min.js",
