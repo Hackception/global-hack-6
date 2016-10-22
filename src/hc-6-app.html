@@ -50,7 +50,7 @@
         height: 150px;
         display: block;
       }
-      #mainMenu .userInfo {
+      #mainMenu .userInfo:not([hidden]) {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -103,7 +103,7 @@
 
       .login {
         text-align: center;
-        margin-top: 16px;
+        padding: 16px;
       }
       .login paper-button {
         --paper-button:{
@@ -149,10 +149,11 @@
       <!-- Drawer content -->
       <app-drawer id="mainMenu" opened={{_opened}}
         swipe-open>
-        <div class="userInfo" hidden$=[[_isLoggedIn]]>
+        <div class="userInfo" hidden$=[[!_isLoggedIn]]>
           <iron-image class="avatar" alt="User" src="//placehold.it/150x150"></iron-image>
           <div class="name">Stramel</div>
         </div>
+        <app-toolbar hidden$=[[_isLoggedIn]]>Menu</app-toolbar>
         <iron-selector
           selected=[[page]]
           attr-for-selected=name
@@ -167,8 +168,8 @@
           <a name=user-lookup href=/user-lookup>User Lookup</a>
         </iron-selector>
         <div class="login">
-          <paper-button hidden$=[[_isLoggedIn]] raised on-click=login>[[localize('hc-6-app-login')]]</paper-button>
-          <paper-button hidden$=[[!_isLoggedIn]] raised on-click=logout>[[localize('hc-6-app-logout')]]</paper-button>
+          <paper-button hidden$=[[_isLoggedIn]] on-click=login>[[localize('hc-6-app-login')]]</paper-button>
+          <paper-button hidden$=[[!_isLoggedIn]] on-click=logout>[[localize('hc-6-app-logout')]]</paper-button>
         </div>
       </app-drawer>
       <!-- Main content -->
