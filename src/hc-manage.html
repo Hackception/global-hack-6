@@ -1,6 +1,8 @@
 <link rel=import href=../bower_components/polymer/polymer.html>
 <link rel=import href=shared-styles.html>
 <link rel=import href=elements/hc-manage-coc.html>
+<link rel=import href=../bower_components/iron-pages/iron-pages.html>
+<link rel=import href=../bower_components/iron-selector/iron-selector.html>
 
 <dom-module id=hc-manage>
   <template>
@@ -13,7 +15,25 @@
     <div class=card>
       <h1>Manage</h1>
 
-      <hc-manage-coc language=[[language]]></hc-manage-coc>
+      <iron-selector
+        selected={{_selected}}
+        attr-for-selected=name
+        >
+        <div name=manage-coc>COC</div>
+        <div name=manage-location>Locations</div>
+        <div name=manage-program>Programs</div>
+        <div name=manage-referrals>Referrals</div>
+      </iron-selector>
+
+      <iron-pages
+        attr-for-selected=name
+        selected={{_selected}}
+        >
+        <hc-manage-coc name=manage-coc language=[[language]]></hc-manage-coc>
+        <hc-manage-location name=manage-location language=[[language]]></hc-manage-location>
+        <hc-manage-program name=manage-program language=[[language]]></hc-manage-program>
+        <hc-manage-referrals name=manage-referrals language=[[language]]></hc-manage-referrals>
+      </iron-pages>
     </div>
   </template>
   <script>
