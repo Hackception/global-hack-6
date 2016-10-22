@@ -129,11 +129,9 @@
        database-url="https://global-hack-6.firebaseio.com"
        storage-bucket="global-hack-6.appspot.com"
        messaging-sender-id="1020118093880"
-       name=hc-app
     ></firebase-app>
     <firebase-auth
       id=auth
-      app-name=hc-app
       signed-in={{_isLoggedIn}}
     ></firebase-auth>
 
@@ -224,13 +222,13 @@
           fallback-selection=404
           role=main
           >
-          <hc-home name=home language=[[language]]></hc-home>
-          <hc-intake name=intake language=[[language]]></hc-intake>
-          <hc-location-lookup name=location-lookup language=[[language]]></hc-location-lookup>
-          <hc-manage name=manage language=[[language]]></hc-manage>
-          <hc-reporting name=reporting language=[[language]]></hc-reporting>
-          <hc-user-lookup name=user-lookup language=[[language]]></hc-user-lookup>
-          <hc-404 name=404 language=[[language]]></hc-404>
+          <hc-home name=home language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-home>
+          <hc-intake name=intake language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-intake>
+          <hc-location-lookup name=location-lookup language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-location-lookup>
+          <hc-manage name=manage language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-manage>
+          <hc-reporting name=reporting language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-reporting>
+          <hc-user-lookup name=user-lookup language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-user-lookup>
+          <hc-404 name=404 language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-404>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
@@ -260,6 +258,16 @@
         Polymer.AppLocalizeBehavior
       ],
       properties: {
+        baseUrl: {
+          type: String,
+          value: 'http://localhost:3000/api'
+        },
+        headers: {
+          type: Object,
+          value: () => ({
+            'Access-Control-Allow-Origin': '*'
+          })
+        },
         language: {
           type: String,
           value: 'en'
