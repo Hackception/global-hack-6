@@ -10,7 +10,7 @@ router.route('/')
   global.db.ref(search).once('value').then(function(snapshot) {
     var dataSet = snapshot.val();
     if(keyList) {
-      var arrayLength = myStringArray.length;
+      var arrayLength = keyList.length;
       var dataResponse = {};
       for (var i = 0; i < arrayLength; i++) {
         dataResponse[i] = dataSet[keyList[i]] || {};
