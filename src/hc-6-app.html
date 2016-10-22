@@ -11,6 +11,9 @@
 <link rel=import href=../bower_components/paper-icon-button/paper-icon-button.html>
 <link rel=import href=../bower_components/iron-pages/iron-pages.html>
 <link rel=import href=../bower_components/iron-selector/iron-selector.html>
+<link rel=import href=../bower_components/iron-selector/iron-selector.html>
+<link rel=import href=../bower_components/platinum-sw/platinum-sw-register.html>
+<link rel=import href=../bower_components/platinum-sw/platinum-sw-offline-analytics.html>
 
 <dom-module id=hc-6-app>
   <template>
@@ -53,6 +56,10 @@
        storage-bucket="global-hack-6.appspot.com"
        messaging-sender-id="1020118093880"
     ></firebase-app>
+
+    <platinum-sw-register auto-register>
+      <platinum-sw-offline-analytics></platinum-sw-offline-analytics>
+    </platinum-sw-register>
 
     <app-location
       route={{route}}
