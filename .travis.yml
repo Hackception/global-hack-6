@@ -7,5 +7,9 @@ script:
   - gulp
 install:
   - npm install -g firebase-tools bower gulpjs/gulp#4.0
-after_success:
-  - firebase deploy --token ${FIREBASE_TOKEN} --project global-hack-6
+deploy:
+  skip_cleanup: true
+  provider: 'script'
+  script: firebase deploy --token ${FIREBASE_TOKEN} --project global-hack-6
+  on:
+    branch: 'master'
