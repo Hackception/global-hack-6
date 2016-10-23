@@ -1,5 +1,6 @@
 <link rel=import href=../../bower_components/polymer/polymer.html>
 <link rel=import href=../../bower_components/iron-ajax/iron-ajax.html>
+<link rel=import href=../../bower_components/iron-flex-layout/iron-flex-layout.html>
 <link rel=import href=../shared-styles.html>
 <link rel=import href=./hc-data-utils-behavior.html>
 
@@ -7,8 +8,22 @@
   <template>
     <style include=shared-styles>
       :host {
-        display: block;
+        @apply(--layout-horizontal);
+        @apply(--layout-wrap);
       }
+      .service.card {
+        flex: 1 1 40%;
+      }
+      .title {
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-bottom: 16px;
+      }
+      .description,
+      .title {
+        text-align: center;
+      }
+
     </style>
 
     <template
@@ -16,7 +31,7 @@
       items=[[services]]
       as=service
       sort=__sort>
-      <div class=service>
+      <div class="service card">
         <div class=title>
           [[service.name]]
         </div>
