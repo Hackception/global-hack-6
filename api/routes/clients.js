@@ -28,9 +28,11 @@ router.route('/wait-list')
           responseObj.lastName = keyData.responses.lastName.answer || '';
           responseObj.phoneNumber = keyData.phone || '';
           responseObj.onStreets = keyData.responses.onStreets.answer || '';
+        } else {
+          responseObj.conversationCode = key;
+          responseObj.phoneNumber = keyData.phone;
         }
-        responseObj.conversationCode = key;
-        responseObj.phoneNumber = keyData.phone;
+        responseObj.weight = keyData.weight;
         responseList.push(responseObj);
       }
     }
