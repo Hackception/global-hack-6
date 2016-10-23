@@ -5,6 +5,19 @@ router.route('/')
   var newPostKey = req.body.key || global.db.ref().child('locations').push().key;
   res.json(global.db.ref('locations/' + newPostKey).set(req.body).key);
 })
+.patch(function(req, res) {
+  var putArray = req.body;
+  if (putArray) {
+    var responseObj = putArray.reduce((obj, data) => {
+      obj[data.key] = data;
+      delete obj[data.key].key;
+      return obj;
+    }, {});
+    res.json(global.db.ref('locations').update(responseObj));
+  } else {
+    res.json();
+  }
+})
 .get(function(req, res) {
   var keyList = req.query.keyList;
   var search = 'locations/' + (req.query.key || '');
@@ -129,17 +142,25 @@ router.route('/search-by-service')
     var dataSet = snapshot.val();
     var dataList = Object.keys(dataSet);
     var dataLength = dataList.length;
-    var servicesKey = req.query.serviceId;
-    // var servicesKey = "-KUis8Cl0AJXwFI9TN8b";
     var resultList = [];
-    for (var i = 0; i < dataLength; i++) {
-      var key = dataList[i];
-      var obj = dataSet[key];
-      var serviceObj = obj.services;
-      if(serviceObj[servicesKey]) {
+    var servicesKey = req.query.serviceId;
+    if(servicesKey) {
+      for (var i = 0; i < dataLength; i++) {
+        var key = dataList[i];
+        var obj = dataSet[key];
+        var serviceObj = obj.services;
+        if(serviceObj[servicesKey]) {
+          resultList.push(dataSet[key]);
+        }
+      }
+    } else {
+      for (var i = 0; i < dataLength; i++) {
+        var key = dataList[i];
+        var obj = dataSet[key];
         resultList.push(dataSet[key]);
       }
     }
+    // var servicesKey = "-KUis8Cl0AJXwFI9TN8b";
     res.json(resultList);
   })
 });

@@ -53,6 +53,21 @@
         font-size: 1.4rem;
 
       }
+      .submitted {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .submitted[hidden] {
+        display: none;
+      }
+      .submitted span {
+        flex: 1;
+        margin-left: 16px;
+      }
+      form[hidden] {
+        display: none;
+      }
     </style>
 
     <div class="wrapper">
@@ -71,17 +86,21 @@
       <h3>Need more Assistance</h3>
 
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nec aliquam elit, sagittis maximus dolor. Integer nibh augue, sodales at pellentesque vitae, fermentum id lectus. Nullam eu pharetra nunc. Sed vulputate mattis nunc quis blandit. Aenean cursus, velit at commodo gravida, urna ex gravida felis, a commodo mauris odio a libero. Aenean condimentum sem leo, vel porta magna consectetur sit amet. Nam laoreet id erat convallis pellentesque.</p>
-      <p>Add your email and we will get back to you as soon as possible with some helpful information</p>
 
-      <form>
+      <form hidden$="[[_submitted]]">
         <paper-input
           label="Email Address" name="email" value={{email}} type="email"></paper-input>
         <paper-button on-click="_updateMailList">Submit</paper-button>
       </form>
+      <div class="submitted" hidden$="[[!_submitted]]">
+        <iron-icon icon="check"></iron-icon>
+        <span>We have received your email and we will get back to you as soon as possible with some helpful information!</span>
+      </div>
       <iron-ajax id="ajax"
         url="[[baseUrl]]/emails"
         method="POST"
         body="{{requestBody}}"
+        content-type="application/json"
         handle-as="json">
       </iron-ajax>
     </div>
@@ -96,13 +115,19 @@
       properties: {
         baseUrl: String,
         headers: Object,
-        email: String
+        email: String,
+        _submitted: {
+          type: Boolean,
+          value: false
+        }
       },
       _updateMailList() {
-        this.requestBody =  {
+        this.requestBody = JSON.stringify({
           email: this.email
-        };
+        });
         this.$.ajax.generateRequest();
+        this.email = '';
+        this._submitted = true;
       }
     });
   </script>
