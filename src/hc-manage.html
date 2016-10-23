@@ -19,7 +19,6 @@
 
       .menu paper-tabs {
         --paper-tab-ink: var(--dark-primary-color);
-        --paper-tabs-selection-bar-color: var(--light-primary-color);
         --paper-tab: {
           background-color: var(--default-primary-color);
           color: var(--text-primary-color);
@@ -68,6 +67,10 @@
         __dirty: {
           type: Boolean,
           value: false
+        },
+        __selected: {
+          type: String,
+          value: 'cocs'
         }
       },
       _getRoute(baseUrl, selected) {
