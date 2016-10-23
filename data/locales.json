@@ -11,6 +11,8 @@
     "hc-6-app-password": "Password",
     "hc-6-app-cancel": "Cancel",
     "hc-6-app-login": "Login",
-    "hc-6-app-logout": "Logout"
+    "hc-6-app-logout": "Logout",
+    "hc-manage-new-item-name": "Enter Name",
+    "hc-manage-new-item-submit": "Submit"
   }
 }
