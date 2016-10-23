@@ -25,7 +25,8 @@ THE SOFTWARE.
 var enums = require('../constants/enums'),
     questionPath = require('../constants/question-path'),
     twilio = require('twilio'),
-    responseStore = require('../db/response-store');
+    responseStore = require('../db/response-store'),
+    weight = require('./weights');
 
 // Main question loop
 exports.question = function(req, res) {
@@ -37,6 +38,10 @@ exports.question = function(req, res) {
         previousNode = questionPath[currentIndex];
     }
 
+
+          say('Thank you. Goodbye!');
+          twiml.redirect('/api/questions/finish');
+          return respond();
     // helper to append a new "Say" verb with alice voice
     function say(text) {
         twiml.say(text, {
@@ -67,7 +72,7 @@ exports.question = function(req, res) {
         // If question is null, we're done!
         if (index === null) {
             say('Thank you. Goodbye!');
-            twiml.redirect('');
+            twiml.redirect('/api/questions/finish');
             return respond();
         }
 
@@ -125,8 +130,8 @@ exports.listQuestions = function(req, res) {
 }
 
 exports.finishUp = function(req, res) {
-  // TODO
   console.log(req.body.CallSid);
+  //weight.calculateWeight(req.body.CallSid);
   res.end();
 }
 

@@ -433,7 +433,7 @@ module.exports = [{ // 0
         text: 'Do you have any friends, family, or other people in your life out of convenience or necessity, but you do not like their company?',
         type: enums.questionTypes.SWITCH,
         timeout: 10,
-        key: 'friendsOrFamily'
+        key: 'friendsOrFamilyDislike'
     },
     values: {
         '1': {
@@ -462,7 +462,7 @@ module.exports = [{ // 0
         text: 'Do any friends, family, or other people in your life ever take your money, borrow cigarettes, use your drugs, drink your alcohol, or get you to do things you don\'t really want to do?',
         type: enums.questionTypes.SWITCH,
         timeout: 10,
-        key: 'friendsOrFamily'
+        key: 'friendsOrFamilySteal'
     },
     values: {
         '1': {
