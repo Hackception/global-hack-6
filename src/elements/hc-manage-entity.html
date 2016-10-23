@@ -23,7 +23,7 @@
     </style>
 
     <!-- <hc-contact-info language=[[language]]></hc-contact-info> -->
-    <iron-list id="coolStuff" items="[[items]]" target="document">
+    <iron-list items="[[items]]" scroll-target="document">
       <template>
         <div
           tabindex$="[[tabIndex]]"
@@ -70,14 +70,7 @@
           computed: '_dirtyCheck(items.*)'
         }
       },
-      ready() {
-        Polymer.RenderStatus.afterNextRender(() => {
-
-            this.$.coolStuff.notifyResize();
-        })
-      },
       _dirtyCheck(changeRecord) {
-        console.log(changeRecord, changeRecord.path !== 'items');
         return changeRecord.path !== 'items';
       },
       _toggleOverlay(event) {
