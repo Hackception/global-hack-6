@@ -1,5 +1,7 @@
 <link rel=import href=../bower_components/polymer/polymer.html>
 <link rel=import href=shared-styles.html>
+<link rel=import href=../bower_components/iron-ajax/iron-ajax.html>
+<link rel=import href=../bower_components/iron-list/iron-list.html>
 
 <dom-module id=hc-user-lookup>
   <template>
@@ -12,10 +14,28 @@
     <div class=card>
       <h1>User Lookup</h1>
     </div>
+
+    <iron-list items={{items}} max-physical-count=25>
+      <template>
+        <span>[[item.phoneNumber]][[item.weight]]</span>
+      </template>
+    </iron-list>
+
+    <iron-ajax
+      auto
+      url=[[baseUrl]]/clients/wait-list
+      headers=[[headers]]
+      last-response={{items}}>
+    </iron-ajax>
   </template>
   <script>
     Polymer({
-      is: 'hc-user-lookup'
+      is: 'hc-user-lookup',
+      properties: {
+        baseUrl: String,
+        headers: Object,
+        items: Array
+      }
     });
   </script>
 </dom-module>
