@@ -5,8 +5,8 @@ exports.calculateWeight = function(key) {
         var data = snapshot.val();
         var responses = data.responses;
         var weight = 0; // start
-        // handle keys manually
 
+        // handle keys manual
         if ((responses['onStreets'] || {}).answer > 24 || (responses['housedHomeless'] || {}).answer > 4) {
             weight++;
         }
