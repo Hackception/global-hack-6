@@ -36,6 +36,9 @@ router.route('/wait-list')
         responseList.push(responseObj);
       }
     }
+    responseList.sort(function(a,b) {
+      return a.weight - b.weight;
+    });
     res.json(responseList);
   })
 })
