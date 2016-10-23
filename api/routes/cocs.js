@@ -5,7 +5,7 @@ router.route('/')
   var newPostKey = req.body.key || global.db.ref().child('cocs').push().key;
   res.json(global.db.ref('cocs/' + newPostKey).set(req.body).key);
 })
-.put(function(req, res) {
+.patch(function(req, res) {
   var putArray = req.body;
   if (putArray) {
     var responseObj = putArray.reduce((obj, data) => {
