@@ -51,22 +51,22 @@ router.route('/locations')
   });
 })
 ;
-router.route('/random')
-.post(function(req, res) {
-  var count = 50;
-  for (var i = 2; i < count; i++) {
-    var newPost = {};
-    newPost.contactInfo = {};
-    newPost.contactInfo.street = faker.address.streetAddress();
-    newPost.contactInfo.city = faker.address.city();
-    newPost.contactInfo.zip = faker.address.zipCode();
-    newPost.contactInfo.state = faker.address.stateAbbr();
-    newPost.name = "COC Number " + i;
-    newPost.email = faker.internet.email();
-    newPost.phoneNumber = faker.phone.phoneNumber();
-    var newPostKey = global.db.ref().child('locations').push().key;
-    global.db.ref('cocs/' + newPostKey).set(newPost);
-  }
-  res.json();
-});
+// router.route('/random')
+// .post(function(req, res) {
+//   var count = 50;
+//   for (var i = 2; i < count; i++) {
+//     var newPost = {};
+//     newPost.contactInfo = {};
+//     newPost.contactInfo.street = faker.address.streetAddress();
+//     newPost.contactInfo.city = faker.address.city();
+//     newPost.contactInfo.zip = faker.address.zipCode();
+//     newPost.contactInfo.state = faker.address.stateAbbr();
+//     newPost.name = "COC Number " + i;
+//     newPost.email = faker.internet.email();
+//     newPost.phoneNumber = faker.phone.phoneNumber();
+//     var newPostKey = global.db.ref().child('locations').push().key;
+//     global.db.ref('cocs/' + newPostKey).set(newPost);
+//   }
+//   res.json();
+// });
 module.exports = router;
