@@ -5,7 +5,7 @@ router.route('/')
   res.json(global.db.ref('clients/' + newPostKey).set(req.body).key);
 })
 .get(function(req, res) {
-  var search = 'clients/' + (req.body.key || '');
+  var search = 'clients/' + (req.query.key || '');
   global.db.ref(search).once('value').then(function(snapshot) {
     res.json(snapshot.val());
   });

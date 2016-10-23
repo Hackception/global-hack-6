@@ -5,15 +5,26 @@ router.route('/')
   res.json(global.db.ref('locations/' + newPostKey).set(req.body).key);
 })
 .get(function(req, res) {
-  var search = 'locations/' + (req.body.key || '');
+  var keyList = req.query.keyList;
+  var search = 'locations/' + (req.query.key || '');
   global.db.ref(search).once('value').then(function(snapshot) {
-    res.json(snapshot.val());
+    var dataSet = snapshot.val();
+    if(keyList) {
+      var arrayLength = keyList.length;
+      var dataResponse = {};
+      for (var i = 0; i < arrayLength; i++) {
+        dataResponse[i] = dataSet[keyList[i]] || {};
+      }
+      res.json(dataResponse);
+    } else {
+      res.json(dataSet);
+    }
   });
 })
 ;
 router.route('/programs')
 .get(function(req, res) {
-  var locationId = req.body.locationId;
+  var locationId = req.query.locationId;
   global.db.ref('locations/' + locationId + '/programs/').once('value').then(function(snapshot) {
     res.json(snapshot.val());
   });
@@ -41,7 +52,7 @@ router.route('/programs')
 ;
 router.route('/services')
 .get(function(req, res) {
-  var locationId = req.body.locationId;
+  var locationId = req.query.locationId;
   global.db.ref('locations/' + locationId + '/services/').once('value').then(function(snapshot) {
     res.json(snapshot.val());
   });

@@ -68,6 +68,11 @@
         font-weight: bold;
       }
 
+      iron-pages,
+      iron-pages > * {
+        height: 100%;
+      }
+
       form#search > * {
         display: inline-block;
       }
@@ -210,12 +215,10 @@
                 label="Search..."
                 no-label-float
               ></paper-input>
-              <button type="submit">
-                <paper-icon-button
-                  icon=search
-                  on-blur="_toggleSearch"
-                ></paper-icon-button>
-              </button>
+              <paper-icon-button
+                icon=search
+                on-blur="_toggleSearch"
+              ></paper-icon-button>
             </form>
 
             <paper-icon-button
