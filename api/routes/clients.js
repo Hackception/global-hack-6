@@ -23,10 +23,14 @@ router.route('/wait-list')
         var key = intakesKeyList[i];
         var keyData = intakes[key];
         responseObj = {};
-        responseObj.firstName = keyData.responses.firstName.answer;
-        responseObj.lastName = keyData.responses.lastName.answer;
+        if(keyData.responses.firstName.answer) {
+          responseObj.firstName = keyData.responses.firstName.answer || '';
+          responseObj.lastName = keyData.responses.lastName.answer || '';
+          responseObj.phoneNumber = keyData.phone || '';
+          responseObj.onStreets = keyData.responses.onStreets.answer || '';
+        }
+        responseObj.conversationCode = key;
         responseObj.phoneNumber = keyData.phone;
-        responseObj.onStreets = keyData.responses.onStreets.answer;
         responseList.push(responseObj);
       }
     }
