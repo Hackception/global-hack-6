@@ -1,6 +1,10 @@
 <link rel=import href=../bower_components/polymer/polymer.html>
 <link rel=import href=shared-styles.html>
 <link rel=import href=elements/hc-services-list.html>
+<link rel=import href=../bower_components/iron-image/iron-image.html>
+<link rel=import href=../bower_components/iron-form-element-behavior/iron-form-element-behavior.html>
+<link rel=import href=../bower_components/paper-button/paper-button.html>
+<link rel=import href=../bower_components/paper-input/paper-input.html>
 
 <dom-module id=hc-home>
   <template>
@@ -8,14 +12,82 @@
       :host {
         display: block;
       }
+      iron-image {
+        --iron-image-width: 100%;
+      }
+      .wrapper {
+        position: relative;
+      }
+      .overlay {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .title {
+        font-size: 2.6rem;
+        font-weight: bold;
+        color: white;
+      }
+      .info {
+        margin: 48px;
+      }
+      .info form {
+        display: flex;
+        width: 50%;
+        margin: 0 auto;
+      }
+      .info form paper-input {
+        flex: 1;
+      }
+      .footer {
+        background-color: var(--dark-primary-color);
+        margin-top: 40px;
+        padding: 24px;
+        text-align: center;
+        color: var(--text-primary-color);
+        font-size: 1.4rem;
+
+      }
     </style>
 
-    <div class=card>
-      <h1>Home</h1>
-      <hc-services-list
-        base-url=[[baseUrl]]
-        headers={{headers}}
-      ></hc-services-list>
+    <div class="wrapper">
+      <iron-image src="/images/c2.jpg" preload fade></iron-image>
+      <div class="overlay">
+        <div class="title">TEST</div>
+      </div>
+    </div>
+
+    <hc-services-list
+      base-url=[[baseUrl]]
+      headers={{headers}}
+    ></hc-services-list>
+
+    <div class="info">
+      <h3>Need more Assistance</h3>
+
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nec aliquam elit, sagittis maximus dolor. Integer nibh augue, sodales at pellentesque vitae, fermentum id lectus. Nullam eu pharetra nunc. Sed vulputate mattis nunc quis blandit. Aenean cursus, velit at commodo gravida, urna ex gravida felis, a commodo mauris odio a libero. Aenean condimentum sem leo, vel porta magna consectetur sit amet. Nam laoreet id erat convallis pellentesque.</p>
+      <p>Add your email and we will get back to you as soon as possible with some helpful information</p>
+
+      <form>
+        <paper-input
+          label="Email Address" name="email" value={{email}} type="email"></paper-input>
+        <paper-button on-click="_updateMailList">Submit</paper-button>
+      </form>
+      <iron-ajax id="ajax"
+        url="[[baseUrl]]/emails"
+        method="POST"
+        body="{{requestBody}}"
+        handle-as="json">
+      </iron-ajax>
+    </div>
+
+    <div class="footer">
+      Open Sourced with <3 from GitHub
     </div>
   </template>
   <script>
@@ -23,7 +95,14 @@
       is: 'hc-home',
       properties: {
         baseUrl: String,
-        headers: Object
+        headers: Object,
+        email: String
+      },
+      _updateMailList() {
+        this.requestBody =  {
+          email: this.email
+        };
+        this.$.ajax.generateRequest();
       }
     });
   </script>
