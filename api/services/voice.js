@@ -25,7 +25,8 @@ THE SOFTWARE.
 var enums = require('../constants/enums'),
     questionPath = require('../constants/question-path'),
     twilio = require('twilio'),
-    responseStore = require('../db/response-store');
+    responseStore = require('../db/response-store'),
+    weight = require('./weights');
 
 // Main question loop
 exports.question = function(req, res) {
@@ -67,7 +68,7 @@ exports.question = function(req, res) {
         // If question is null, we're done!
         if (index === null) {
             say('Thank you. Goodbye!');
-            twiml.redirect('');
+            twiml.redirect('/api/questions/finish');
             return respond();
         }
 
@@ -89,7 +90,7 @@ exports.question = function(req, res) {
         say(question.text);
 
         if (question.type === enums.questionTypes.INPUT) {
-            say('Enter the number using the number keys on your telephone. Press pound to finish.');
+            say('Press pound to finish.');
             twiml.gather({
                 action: action,
                 timeout: question.timeout
@@ -104,7 +105,7 @@ exports.question = function(req, res) {
                 numDigits: 1
             });
         } else { // TEXT
-            say('Please record your response after the beep. Press any key to finish.');
+            say('Press any key to finish.');
             twiml.record({
                 action: action,
                 // TODO uncomment when ready for transcription
@@ -125,9 +126,12 @@ exports.listQuestions = function(req, res) {
 }
 
 exports.finishUp = function(req, res) {
-  // TODO
-  console.log(req.body.CallSid);
-  res.end();
+  weight.calculateWeight(req.body.CallSid);
+
+  var twiml = new twilio.TwimlResponse();
+  twiml.hangup();
+  res.type('text/xml');
+  res.send(twiml.toString());
 }
 
 // TODO update
