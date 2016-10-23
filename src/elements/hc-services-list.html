@@ -23,7 +23,6 @@
       .title {
         text-align: center;
       }
-
     </style>
 
     <template
@@ -31,14 +30,14 @@
       items=[[services]]
       as=service
       sort=__sort>
-      <div class="service card">
+      <a class="service card" href=/location-lookup/[[service.key]]>
         <div class=title>
           [[service.name]]
         </div>
         <div class=description>
           [[service.description]]
         </div>
-      </div>
+      </a>
     </template>
 
     <iron-ajax
