@@ -37,11 +37,9 @@ exports.question = function(req, res) {
     if (currentIndex) {
         previousNode = questionPath[currentIndex];
     }
-
-
-          say('Thank you. Goodbye!');
-          twiml.redirect('/api/questions/finish');
-          return respond();
+        say('Thank you. Goodbye!');
+        twiml.redirect('/api/questions/finish');
+        return respond();
     // helper to append a new "Say" verb with alice voice
     function say(text) {
         twiml.say(text, {
@@ -130,9 +128,12 @@ exports.listQuestions = function(req, res) {
 }
 
 exports.finishUp = function(req, res) {
-  console.log(req.body.CallSid);
-  //weight.calculateWeight(req.body.CallSid);
-  res.end();
+  weight.calculateWeight(req.body.CallSid);
+
+  var twiml = new twilio.TwimlResponse();
+  twiml.hangup();
+  res.type('text/xml');
+  res.send(twiml.toString());
 }
 
 // TODO update
