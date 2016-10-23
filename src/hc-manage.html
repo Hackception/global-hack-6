@@ -4,6 +4,7 @@
 <link rel=import href=../bower_components/iron-selector/iron-selector.html>
 <link rel=import href=elements/hc-manage-entity.html>
 <link rel=import href=../../bower_components/iron-ajax/iron-ajax.html>
+<link rel=import href=elements/hc-data-utils-behavior.html>
 
 <dom-module id=hc-manage>
   <template>
@@ -43,6 +44,7 @@
   <script>
     Polymer({
       is: 'hc-manage',
+      behaviors: [window.hc.dataUtilsBehavior],
       properties: {
         items: {
           type: Array,
@@ -59,9 +61,8 @@
         return this.__dirty ? undefined : `${baseUrl}/${selected}`;
       },
       _getItems(event) {
-        const data = event.detail.response;
-        this.set('items', Object.keys(data).map(key => Object.assign({key}, data[key])));
-      },
+        this.set('items', this.convertObjToArray(event.detail.response));
+      }
     });
   </script>
 </dom-module>
