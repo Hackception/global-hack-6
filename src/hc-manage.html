@@ -34,6 +34,9 @@
         bottom: 50px;
         right: 50px;
       }
+      .shift {
+        right: 115px;
+      }
     </style>
 
     <div class="menu">
@@ -45,7 +48,7 @@
         >
         <paper-tab name=cocs>COC</paper-tab>
         <paper-tab name=locations>Locations</paper-tab>
-        <paper-tab name=programs>Programs</paper-tab>
+        <!-- <paper-tab name=programs>Programs</paper-tab> -->
         <!-- <paper-tab name=referrals>Referrals</paper-tab> -->
       </paper-tabs>
     </div>
@@ -54,7 +57,7 @@
       <hc-manage-entity
         language=[[language]]
         items={{items}}
-        dirty={{__dirty}}
+        dirty-indexes={{__dirtyIndexes}}
       ></hc-manage-entity>
 
       <iron-ajax
@@ -64,14 +67,22 @@
         on-response=_getItems
       ></iron-ajax>
       <iron-ajax
-        id=ajax
+        id=ajaxPost
         method=post
         url=[[baseUrl]]/[[__selected]]
         headers=[[headers]]
         on-reponse=_itemAdded
         content-type=application/json
       ></iron-ajax>
+      <iron-ajax
+        id=ajaxPatch
+        method=patch
+        url=[[baseUrl]]/[[__selected]]
+        headers=[[headers]]
+        content-type=application/json
+      ></iron-ajax>
     <paper-fab icon="add" on-tap=_createNew></paper-fab>
+    <paper-fab icon="save" class=shift disabled$=[[_isDirty(__dirtyIndexes)]] on-tap=_updateItems></paper-fab>
     <paper-dialog
       id=new-item-dialog
       on-iron-overlay-closed=_postNewItem>
@@ -102,10 +113,7 @@
           value: () => []
         },
         baseUrl: String,
-        __dirty: {
-          type: Boolean,
-          value: false
-        },
+        __dirtyIndexes: Array,
         __selected: {
           type: String,
           value: 'cocs'
@@ -121,9 +129,18 @@
           })
         }
       },
+      _updateItems() {
+        const items = Array.from(new Set(this.__dirtyIndexes)).map(index => this.items[index]);
+        this.$.ajaxPatch.body = JSON.stringify(items);
+        this.$.ajaxPatch.generateRequest().completes.then(() => this.set('__dirtyIndexes', []));
+      },
       _getRoute(baseUrl, selected) {
-        if (this.__dirty) console.error('you have unsaved data...');
-        return this.__dirty ? undefined : `${baseUrl}/${selected}`;
+        const dirty = this._isDirty(this.__dirtyIndexes);
+        if (dirty) console.error('you have unsaved data...');
+        return dirty ? undefined : `${baseUrl}/${selected}`;
+      },
+      _isDirty(dirtyIndexes) {
+        return dirtyIndexes && dirtyIndexes.length > 0;
       },
       _getItems(event) {
         this.set('items', this.convertObjToArray(event.detail.response));
@@ -132,8 +149,8 @@
         this.$['new-item-dialog'].open();
       },
       _postNewItem() {
-        this.$.ajax.body = JSON.stringify(this._newItem);
-        this.$.ajax.generateRequest().completes.then(() =>
+        this.$.ajaxPost.body = JSON.stringify(this._newItem);
+        this.$.ajaxPost.generateRequest().completes.then(() =>
           this._newItem = {contactInfo: {address: {zip: ''}}});
       },
       _itemAdded() {

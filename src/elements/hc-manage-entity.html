@@ -19,29 +19,36 @@
       .relative {
         position: relative;
       }
+      .relative[open] {
+        z-index: 1;
+      }
+      iron-collapse, .dropdown-content {
+        background-color: white;
+      }
     </style>
 
-    <iron-list items="[[items]]" scroll-target="document">
+    <iron-list items="{{items}}" scroll-target="document" as=item>
       <template>
-        <div class=relative>
+        <div class=relative
+          open$=[[_isSelected(__selectedIndex,index)]]>
           <div
-            tabindex$="[[tabIndex]]"
+            tabindex$=[[tabIndex]]
             class=title
             id$=overlay-title-[[index]]
             on-click=_toggleOverlay>
             [[item.name]]
           </div>
-          <iron-collapse id$=overlay-[[index]]>
+          <iron-collapse id$=overlay-[[index]] opened=[[_isSelected(__selectedIndex,index)]]>
             <div class=dropdown-content no-overlap>
               <template
                 is=dom-if
                 if=[[!hideContactInfo]]>
                 <hc-contact-info
                   language=[[language]]
-                  address={{item.contactInfo.address}}
-                  phone-number={{item.contactInfo.phoneNumber}}
-                  email={{item.contactInfo.email}}
-                  fax={{item.contactInfo.fax}}
+                  address={{item.contactInfo}}
+                  phone-number={{item.phoneNumber}}
+                  email={{item.email}}
+                  hide-fax
                 ></hc-contact-info>
               </template>
             </div>
@@ -56,30 +63,45 @@
       properties: {
         baseUrl: String,
         headers: Object,
-        items: Array,
+        items: {
+          type: Array,
+          observer: '_reset',
+          notify: true
+        },
         language: Object,
         hideContactInfo: {
           type: Boolean,
           value: false
         },
-        __currentlyOpened: Object,
-        dirty: {
-          type: Boolean,
-          value: false,
-          notify: true,
-          computed: '_dirtyCheck(items.*)'
+        __selectedIndex: {
+          type: Number,
+          value: -1
+        },
+        dirtyIndexes: {
+          type: Array,
+          value: () => [],
+          notify: true
         }
       },
+      observers: [
+        '_dirtyCheck(items.*)'
+      ],
+      _reset() {
+        this.__selectedIndex = -1;
+      },
       _dirtyCheck(changeRecord) {
-        return changeRecord.path !== 'items';
+        if (changeRecord && changeRecord.path) {
+          const parts = changeRecord.path.split('.');
+          const index = parts[1] && parts[1].replace('#', '');
+          if (index) this.push('dirtyIndexes', index);
+        }
+      },
+      _isSelected(selectedIndex, index) {
+        return selectedIndex === index;
       },
       _toggleOverlay(event) {
-        const index = event.model.index;
-        const target = this.$$(`#overlay-${index}`);
-        if (this.__currentlyOpened && this.__currentlyOpened.id !== target.id && this.__currentlyOpened.hide)
-          this.__currentlyOpened.hide();
-        this.set('__currentlyOpened', target);
-        target.toggle();
+        if (this.__selectedIndex === event.model.index) this.__selectedIndex = -1;
+        else this.__selectedIndex = event.model.index;
       }
     });
   </script>
