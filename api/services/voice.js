@@ -37,9 +37,7 @@ exports.question = function(req, res) {
     if (currentIndex) {
         previousNode = questionPath[currentIndex];
     }
-        say('Thank you. Goodbye!');
-        twiml.redirect('/api/questions/finish');
-        return respond();
+    
     // helper to append a new "Say" verb with alice voice
     function say(text) {
         twiml.say(text, {
