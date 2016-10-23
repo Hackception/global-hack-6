@@ -1,21 +1,92 @@
 <link rel=import href=../bower_components/polymer/polymer.html>
 <link rel=import href=shared-styles.html>
+<link rel=import href=../bower_components/iron-ajax/iron-ajax.html>
+<link rel=import href=../bower_components/paper-button/paper-button.html>
+<link rel=import href=../bower_components/paper-input/paper-input.html>
+<link rel=import href=elements/hc-data-utils-behavior.html>
+<link rel=import href=../bower_components/paper-radio-group/paper-radio-group.html>
+<link rel=import href=../bower_components/paper-radio-button/paper-radio-button.html>
 
 <dom-module id=hc-intake>
   <template>
     <style include=shared-styles>
-      :host {
+      :host, .block {
         display: block;
       }
     </style>
 
     <div class=card>
-      <h1>Intake</h1>
+      <h1>Intake Form</h1>
+
+      <template is=dom-repeat items=[[questions]] as=question>
+        <div class=block>
+          <label>[[_getLabel(question.question)]]</label>
+          <template is=dom-if if=[[_isType(question.question.type,'text')]]>
+            <paper-input on-value-changed=_valueChanged no-label-float></paper-input>
+          </template>
+          <template is=dom-if if=[[_isType(question.question.type,'input')]]>
+            <paper-input on-value-changed=_valueChanged type=number no-label-float></paper-input>
+          </template>
+          <template is=dom-if if=[[_isType(question.question.type,'switch')]]>
+            <paper-radio-group on-selected-changed=_valueChanged>
+              <template is=dom-repeat items=[[convertObjToArray(question.values)]] filter=_validSwitch as=value>
+                <paper-radio-button value=[[value.store]]>[[value.name]]</paper-radio-button>
+              </template>
+            </paper-radio-group>
+          </template>
+        </div>
+      </template>
+      <paper-button type=submit on-tap=submit raised>Submit</paper-button>
     </div>
+
+    <iron-ajax
+      auto
+      url=[[baseUrl]]/questions/web
+      last-response={{questions}}
+    ></iron-ajax>
+    <iron-ajax
+      id=ajaxPost
+      method=POST
+      content-type=application/json
+      url=[[baseUrl]]/questions/web
+    ></iron-ajax>
   </template>
   <script>
     Polymer({
-      is: 'hc-intake'
+      is: 'hc-intake',
+      properties: {
+        baseUrl: String,
+        questions: Array,
+        item: {
+          type: Object,
+          notify: true,
+          value: () => ({})
+        }
+      },
+      behaviors: [window.hc.dataUtilsBehavior],
+      _valueChanged(event) {
+        let question = event.model.question;
+        question = question && question.question;
+        if (!question) return;
+        this.item[question.key] = {
+          answer: event.detail.value
+        };
+      },
+      submit() {
+        this.$.ajaxPost.body = {
+          responses: this.item
+        };
+        this.$.ajaxPost.generateRequest();
+      },
+      _isType(qType, type) {
+        return qType === type;
+      },
+      _getLabel(question) {
+        return question.web || question.text;
+      },
+      _validSwitch(val) {
+        return val.store !== null;
+      }
     });
   </script>
 </dom-module>
