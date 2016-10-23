@@ -12,7 +12,7 @@ exports.handleCall = function(args, cb) {
     }
 
     var responseId;
-    var callRef = global.db.ref('calls/' + id);
+    var callRef = global.db.ref('intake/' + id);
 
     callRef.once('value', function(data) {
         if (!data.val()) {
