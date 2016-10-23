@@ -5,8 +5,11 @@
 <link rel=import href=../bower_components/paper-tabs/paper-tab.html>
 <link rel=import href=../bower_components/paper-fab/paper-fab.html>
 <link rel=import href=elements/hc-manage-entity.html>
+<link rel=import href=elements/hc-contact-info.html>
 <link rel=import href=elements/hc-data-utils-behavior.html>
 <link rel=import href=../bower_components/iron-ajax/iron-ajax.html>
+<link rel=import href=../bower_components/paper-input/paper-input.html>
+<link rel=import href=../bower_components/paper-dialog/paper-dialog.html>
 
 <dom-module id=hc-manage>
   <template>
@@ -43,7 +46,7 @@
         <paper-tab name=cocs>COC</paper-tab>
         <paper-tab name=locations>Locations</paper-tab>
         <paper-tab name=programs>Programs</paper-tab>
-        <paper-tab name=referrals>Referrals</paper-tab>
+        <!-- <paper-tab name=referrals>Referrals</paper-tab> -->
       </paper-tabs>
     </div>
 
@@ -60,13 +63,38 @@
         headers=[[headers]]
         on-response=_getItems
       ></iron-ajax>
-    <!-- </div> -->
-    <paper-fab icon="add"></paper-fab>
+      <iron-ajax
+        id=ajax
+        method=post
+        url=[[baseUrl]]/[[__selected]]
+        headers=[[headers]]
+        on-reponse=_itemAdded
+      ></iron-ajax>
+    <paper-fab icon="add" on-tap=_createNew></paper-fab>
+    <paper-dialog
+      id=new-item-dialog
+      on-iron-overlay-closed=_postNewItem>
+      <paper-input label=[[localize('hc-manage-new-item-name')]] value={{_newItem.name}}></paper-input>
+      <hc-contact-info
+        language=[[language]]
+        address={{_newItem.contactInfo.address}}
+        phone-number={{_newItem.contactInfo.phoneNumber}}
+        email={{_newItem.contactInfo.email}}
+        fax={{_newItem.contactInfo.fax}}
+      ></hc-contact-info>
+      <div class="buttons">
+        <paper-button class="primary" dialog-confirm>[[localize('hc-manage-new-item-submit')]]</paper-button>
+        <paper-button dialog-dismiss>[[localize('hc-6-app-cancel')]]</paper-button>
+      </div>
+    </paper-dialog>
   </template>
   <script>
     Polymer({
       is: 'hc-manage',
-      behaviors: [window.hc.dataUtilsBehavior],
+      behaviors: [
+        window.hc.dataUtilsBehavior,
+        Polymer.AppLocalizeBehavior
+      ],
       properties: {
         items: {
           type: Array,
@@ -80,6 +108,16 @@
         __selected: {
           type: String,
           value: 'cocs'
+        },
+        _newItem: {
+          type: Object,
+          value: () => ({
+            contactInfo: {
+              address: {
+                zip: ''
+              }
+            }
+          })
         }
       },
       _getRoute(baseUrl, selected) {
@@ -88,6 +126,20 @@
       },
       _getItems(event) {
         this.set('items', this.convertObjToArray(event.detail.response));
+      },
+      _createNew() {
+        this.$['new-item-dialog'].open();
+      },
+      _postNewItem() {
+        this.$.ajax.body = JSON.stringify(this._newItem);
+        this.$.ajax.generateRequest().completes.then(() =>
+          this._newItem = {contactInfo: {address: {zip: ''}}});
+      },
+      _itemAdded() {
+        console.log('success!!');
+      },
+      attached() {
+        this.loadResources(this.resolveUrl('../data/locales.json'));
       }
     });
   </script>

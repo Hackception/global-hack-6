@@ -9,7 +9,6 @@
     <style include=shared-styles>
       :host {
         display: block;
-        height: 100%;
       }
       .title {
         padding: 16px;
@@ -17,36 +16,37 @@
       .title:not(:last-of-type) {
         border-bottom: 1px solid var(--divider-color);
       }
-      iron-list {
-        height: 100%;
+      .relative {
+        position: relative;
       }
     </style>
 
-    <!-- <hc-contact-info language=[[language]]></hc-contact-info> -->
     <iron-list items="[[items]]" scroll-target="document">
       <template>
-        <div
-          tabindex$="[[tabIndex]]"
-          class=title
-          id$=overlay-title-[[index]]
-          on-click=_toggleOverlay>
-          [[item.name]]
-        </div>
-        <iron-collapse id$=overlay-[[index]]>
-          <div class=dropdown-content no-overlap>
-            <template
-              is=dom-if
-              if=[[!hideContactInfo]]>
-              <hc-contact-info
-                language=[[language]]
-                address={{item.contactInfo.address}}
-                phone-number={{item.contactInfo.phoneNumber}}
-                email={{item.contactInfo.email}}
-                fax={{item.contactInfo.fax}}
-              ></hc-contact-info>
-            </template>
+        <div class=relative>
+          <div
+            tabindex$="[[tabIndex]]"
+            class=title
+            id$=overlay-title-[[index]]
+            on-click=_toggleOverlay>
+            [[item.name]]
           </div>
-        </iron-collapse>
+          <iron-collapse id$=overlay-[[index]]>
+            <div class=dropdown-content no-overlap>
+              <template
+                is=dom-if
+                if=[[!hideContactInfo]]>
+                <hc-contact-info
+                  language=[[language]]
+                  address={{item.contactInfo.address}}
+                  phone-number={{item.contactInfo.phoneNumber}}
+                  email={{item.contactInfo.email}}
+                  fax={{item.contactInfo.fax}}
+                ></hc-contact-info>
+              </template>
+            </div>
+          </iron-collapse>
+        </div>
       </template>
     </iron-list>
   </template>
