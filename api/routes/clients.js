@@ -11,5 +11,26 @@ router.route('/')
   });
 })
 ;
-
+router.route('/wait-list')
+.get(function(req, res) {
+  global.db.ref('intake/').once('value').then(function(snapshot) {
+    var intakes = snapshot.val();
+    var responseList = [];
+    if(intakes){
+      var intakesKeyList = Object.keys(intakes);
+      var dataLength = intakesKeyList.length;
+      for (var i = 0; i < dataLength; i++) {
+        var key = intakesKeyList[i];
+        var keyData = intakes[key];
+        responseObj = {};
+        responseObj.firstName = keyData.responses.firstName.answer;
+        responseObj.lastName = keyData.responses.lastName.answer;
+        responseObj.phoneNumber = keyData.phone;
+        responseObj.onStreets = keyData.responses.onStreets.answer;
+        responseList.push(responseObj);
+      }
+    }
+    res.json(responseList);
+  })
+})
 module.exports = router;
