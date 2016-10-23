@@ -1,5 +1,5 @@
 var router = require('express').Router(),
-voice = require('../twilio/voice');
+voice = require('../services/voice');
 
 router.post('/:index(\\d+)?', voice.question);
 router.post('/finish', voice.finishUp);

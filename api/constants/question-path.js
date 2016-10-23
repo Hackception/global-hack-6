@@ -3,6 +3,7 @@ var enums = require('./enums');
 module.exports = [{ // 0
     question: {
         text: 'After the tone, say your first name',
+        web: 'Please enter your first name',
         type: enums.questionTypes.TEXT,
         maxLength: 60,
         key: 'firstName'
@@ -11,6 +12,7 @@ module.exports = [{ // 0
 }, { // 1
     question: {
         text: 'After the tone, say your last name',
+        web: 'Please enter your last name',
         type: enums.questionTypes.TEXT,
         maxLength: 60,
         key: 'lastName'
@@ -19,6 +21,7 @@ module.exports = [{ // 0
 }, { // 2
     question: {
         text: 'After the tone, say your nick name',
+        web: 'Please enter your nick name if you would rather go by it',
         type: enums.questionTypes.TEXT,
         maxLength: 60,
         key: 'nickName'
@@ -122,7 +125,7 @@ module.exports = [{ // 0
     next: 15
 }, { // 15
     question: {
-        text: 'have you been attacked or beaten up since becoming homeless?',
+        text: 'Have you been attacked or beaten up since becoming homeless?',
         type: enums.questionTypes.SWITCH,
         timeout: 10,
         key: 'attacked'
@@ -151,7 +154,7 @@ module.exports = [{ // 0
     }
 }, { // 16
     question: {
-        text: 'have you threatened to or tried to harm yourself or anyone else in the last year?',
+        text: 'Have you threatened to or tried to harm yourself or anyone else in the last year?',
         type: enums.questionTypes.SWITCH,
         timeout: 10,
         key: 'threatened'
@@ -433,7 +436,7 @@ module.exports = [{ // 0
         text: 'Do you have any friends, family, or other people in your life out of convenience or necessity, but you do not like their company?',
         type: enums.questionTypes.SWITCH,
         timeout: 10,
-        key: 'friendsOrFamily'
+        key: 'friendsOrFamilyDislike'
     },
     values: {
         '1': {
@@ -462,7 +465,7 @@ module.exports = [{ // 0
         text: 'Do any friends, family, or other people in your life ever take your money, borrow cigarettes, use your drugs, drink your alcohol, or get you to do things you don\'t really want to do?',
         type: enums.questionTypes.SWITCH,
         timeout: 10,
-        key: 'friendsOrFamily'
+        key: 'friendsOrFamilySteal'
     },
     values: {
         '1': {
@@ -618,6 +621,7 @@ module.exports = [{ // 0
 }, { // 33
     question: {
         text: 'H I V or AIDS',
+        web: 'HIV or AIDS',
         type: enums.questionTypes.SWITCH,
         timeout: 10,
         key: 'hivAids'

@@ -183,7 +183,7 @@
           <a name=intake href=/intake>Intake</a>
           <a name=location-lookup href=/location-lookup>Location Lookup</a>
           <a name=manage href=/manage>Manage</a>
-          <a name=reporting href=/reporting>Reporting</a>
+          <!-- <a name=reporting href=/reporting>Reporting</a> -->
           <a name=user-lookup href=/user-lookup>User Lookup</a>
         </iron-selector>
         <div class="login">
@@ -245,7 +245,7 @@
           >
           <hc-home name=home language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-home>
           <hc-intake name=intake language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-intake>
-          <hc-location-lookup name=location-lookup language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-location-lookup>
+          <hc-location-lookup name=location-lookup language=[[language]] base-url=[[baseUrl]] headers=[[headers]] tail=[[subroute]]></hc-location-lookup>
           <hc-manage name=manage language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-manage>
           <hc-reporting name=reporting language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-reporting>
           <hc-user-lookup name=user-lookup language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-user-lookup>

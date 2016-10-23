@@ -1,5 +1,10 @@
 <link rel=import href=../bower_components/polymer/polymer.html>
 <link rel=import href=shared-styles.html>
+<link rel=import href=../bower_components/iron-ajax/iron-ajax.html>
+<link rel=import href=elements/hc-data-utils-behavior.html>
+<link rel=import href=../bower_components/google-map/google-map.html>
+<link rel=import href=../bower_components/google-map/google-map-marker.html>
+<link rel=import href=../bower_components/paper-button/paper-button.html>
 
 <dom-module id=hc-location-lookup>
   <template>
@@ -9,13 +14,65 @@
       }
     </style>
 
-    <div class=card>
-      <h1>Location Lookukp</h1>
-    </div>
+    <google-map
+      latitude=[[_latitude]]
+      longitude=[[_longitude]]
+      api-key=AIzaSyDi-6kbUWckFcqsITyxHrQp-dic1hNcqXQ>
+      <template is=dom-repeat items=[[items]]>
+        <google-map-marker
+          latitude=[[item.contactInfo.latitude]]
+          longitude=[[item.contactInfo.longitude]]
+          click-events
+          on-google-map-marker-click=_getDirections>
+          <div>
+            [[item.name]]
+          </div>
+          <div>
+            [[item.contactInfo.street]]
+          </div>
+          <paper-button>Get Directions</paper-button>
+        </google-map-marker>
+      </template>
+    </google-map>
+
+    <iron-ajax
+      auto
+      url=[[baseUrl]]/locations/search-by-service?serviceId=[[key]]
+      on-response=_setItems
+    ></iron-ajax>
   </template>
   <script>
     Polymer({
-      is: 'hc-location-lookup'
+      is: 'hc-location-lookup',
+      properties: {
+        tail: {
+          type: Object,
+          value: () => ({})
+        },
+        key: {
+          type: String,
+          computed: '_computeKey(tail.path)'
+        },
+        _latitude: Number,
+        _longitude: Number,
+        items: Array
+      },
+      attached() {
+        navigator.geolocation.getCurrentPosition(position => {
+          this._latitude = position.coords.latitude;
+          this._longitude = position.coords.longitude;
+        });
+      },
+      behaviors: [window.hc.dataUtilsBehavior],
+      _computeKey(path) {
+        return path && path.substring(1) || '';
+      },
+      _setItems(event) {
+        this.set('items', this.convertObjToArray(event.detail.response));
+      },
+      _getDirections(event) {
+        console.log(event.detail, event.model);
+      }
     });
   </script>
 </dom-module>
