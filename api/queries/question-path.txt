@@ -1,0 +1,19 @@
+//Questions sent on GET
+{
+  "question": {
+    "text": "After the tone, say your first name",
+    "type": "text",
+    "maxLength": 60,
+    "key": "firstName"
+  },
+  "next": 1
+}
+//Answers submitted on populate
+{
+  "responses" : {
+    (key from GET) : {
+      "question" : (text from GET),
+      "answer" : ''
+    }
+  }
+}

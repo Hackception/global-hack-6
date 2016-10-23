@@ -67,6 +67,7 @@ exports.question = function(req, res) {
         // If question is null, we're done!
         if (index === null) {
             say('Thank you. Goodbye!');
+            twiml.redirect('');
             return respond();
         }
 
@@ -118,6 +119,16 @@ exports.question = function(req, res) {
         respond();
     });
 };
+
+exports.listQuestions = function(req, res) {
+  res.json(questionPath);
+}
+
+exports.finishUp = function(req, res) {
+  // TODO
+  console.log(req.body.CallSid);
+  res.end();
+}
 
 // TODO update
 // Transcripton callback - called by Twilio with transcript of recording
