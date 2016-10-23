@@ -1,12 +1,8 @@
 var router = require('express').Router(),
-questionPath = require('../constants/question-path'),
 voice = require('../twilio/voice');
 
-router.post('/:index?', voice.question);
-router.route('/web')
-.get(function(req, res) {
-  res.json(questionPath);
-});
-
+router.post('/:index(\\d+)?', voice.question);
+router.post('/finish', voice.finishUp);
+router.get('/web', voice.listQuestions);
 
 module.exports = router;
