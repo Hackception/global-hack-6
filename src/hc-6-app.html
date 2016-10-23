@@ -49,6 +49,8 @@
         border-radius: 50%;
         width: 150px;
         height: 150px;
+        --iron-image-width: 150px;
+        --iron-image-height: 150px;
         display: block;
       }
       #mainMenu .userInfo:not([hidden]) {
@@ -149,6 +151,7 @@
     <firebase-auth
       id=auth
       signed-in={{__isLoggedIn}}
+      user="{{user}}"
     ></firebase-auth>
 
     <app-location
@@ -166,7 +169,7 @@
       <app-drawer id="mainMenu" opened={{_opened}}
         swipe-open>
         <div class="userInfo" hidden$=[[!__isLoggedIn]]>
-          <iron-image class="avatar" alt="User" src="//placehold.it/150x150"></iron-image>
+          <iron-image class="avatar" alt="User" src="https://api.adorable.io/avatars/300/[[user.email]].png"></iron-image>
           <div class="name">Stramel</div>
         </div>
         <app-toolbar hidden$=[[__isLoggedIn]]>Menu</app-toolbar>
@@ -242,7 +245,7 @@
           >
           <hc-home name=home language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-home>
           <hc-intake name=intake language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-intake>
-          <hc-location-lookup name=location-lookup language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-location-lookup>
+          <hc-location-lookup name=location-lookup language=[[language]] base-url=[[baseUrl]] headers=[[headers]] tail=[[subroute]]></hc-location-lookup>
           <hc-manage name=manage language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-manage>
           <hc-reporting name=reporting language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-reporting>
           <hc-user-lookup name=user-lookup language=[[language]] base-url=[[baseUrl]] headers=[[headers]]></hc-user-lookup>
@@ -319,8 +322,9 @@
       ready() {
         this._hideLoadingIndicator();
         // Sign in Anonymous
-        // if (this.)
-        // this.$.auth
+        if (!this.$.auth.statusKnown) {
+          this.$.auth.signInAnonymously();
+        }
       },
       attached() {
         this.loadResources(this.resolveUrl('../data/locales.json'));
