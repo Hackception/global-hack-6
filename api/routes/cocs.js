@@ -1,13 +1,25 @@
 var router = require('express').Router();
+var faker = require('faker');
 router.route('/')
 .post(function(req, res) {
   var newPostKey = req.body.key || global.db.ref().child('cocs').push().key;
   res.json(global.db.ref('cocs/' + newPostKey).set(req.body).key);
 })
 .get(function(req, res) {
+  var keyList = req.query.keyList;
   var search = 'cocs/' + (req.query.key || '');
   global.db.ref(search).once('value').then(function(snapshot) {
-    res.json(snapshot.val());
+    var dataSet = snapshot.val();
+    if(keyList) {
+      var arrayLength = keyList.length;
+      var dataResponse = {};
+      for (var i = 0; i < arrayLength; i++) {
+        dataResponse[i] = dataSet[keyList[i]] || {};
+      }
+      res.json(dataResponse);
+    } else {
+      res.json(dataSet);
+    }
   });
 })
 ;
@@ -19,7 +31,7 @@ router.route('/locations')
   });
 })
 .post(function(req, res) {
-  var cocsId = req.body.cocsId;
+  var cocsId = req.body.cocId;
   var locationId = req.body.locationId;
   var locationData;
   var cocsData;
@@ -35,8 +47,26 @@ router.route('/locations')
     cocsData.locations = cocsData.locations || {};
     cocsData.locations[locationId] = true;
   }).then(function() {
-    global.db.ref('cocs/' + cocsId).set(cocsData);
+    res.json(global.db.ref('cocs/' + cocsId).set(cocsData));
   });
 })
 ;
+router.route('/random')
+.post(function(req, res) {
+  var count = 50;
+  for (var i = 2; i < count; i++) {
+    var newPost = {};
+    newPost.contactInfo = {};
+    newPost.contactInfo.street = faker.address.streetAddress();
+    newPost.contactInfo.city = faker.address.city();
+    newPost.contactInfo.zip = faker.address.zipCode();
+    newPost.contactInfo.state = faker.address.stateAbbr();
+    newPost.name = "COC Number " + i;
+    newPost.email = faker.internet.email();
+    newPost.phoneNumber = faker.phone.phoneNumber();
+    var newPostKey = global.db.ref().child('locations').push().key;
+    global.db.ref('cocs/' + newPostKey).set(newPost);
+  }
+  res.json();
+});
 module.exports = router;
