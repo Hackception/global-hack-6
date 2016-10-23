@@ -37,7 +37,7 @@ exports.question = function(req, res) {
     if (currentIndex) {
         previousNode = questionPath[currentIndex];
     }
-    
+
     // helper to append a new "Say" verb with alice voice
     function say(text) {
         twiml.say(text, {
@@ -90,7 +90,7 @@ exports.question = function(req, res) {
         say(question.text);
 
         if (question.type === enums.questionTypes.INPUT) {
-            say('Enter the number using the number keys on your telephone. Press pound to finish.');
+            say('Press pound to finish.');
             twiml.gather({
                 action: action,
                 timeout: question.timeout
@@ -105,7 +105,7 @@ exports.question = function(req, res) {
                 numDigits: 1
             });
         } else { // TEXT
-            say('Please record your response after the beep. Press any key to finish.');
+            say('Press any key to finish.');
             twiml.record({
                 action: action,
                 // TODO uncomment when ready for transcription
