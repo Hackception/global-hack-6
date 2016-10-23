@@ -2,12 +2,14 @@
 <link rel=import href=../shared-styles.html>
 <link rel=import href=./hc-contact-info.html>
 <link rel=import href=../../bower_components/iron-collapse/iron-collapse.html>
+<link rel=import href=../../bower_components/iron-list/iron-list.html>
 
 <dom-module id=hc-manage-entity>
   <template>
     <style include=shared-styles>
       :host {
         display: block;
+        height: 100%;
       }
       .title {
         padding: 16px;
@@ -15,35 +17,38 @@
       .title:not(:last-of-type) {
         border-bottom: 1px solid var(--divider-color);
       }
+      iron-list {
+        height: 100%;
+      }
     </style>
 
     <!-- <hc-contact-info language=[[language]]></hc-contact-info> -->
-    <template
-      id=repeat
-      is=dom-repeat
-      items={{items}}>
-      <div
-        class=title
-        id$=overlay-title-[[index]]
-        on-click=_toggleOverlay>
-        [[item.name]]
-      </div>
-      <iron-collapse id$=overlay-[[index]]>
-        <div class=dropdown-content no-overlap>
-          <template
-            is=dom-if
-            if=[[!hideContactInfo]]>
-            <hc-contact-info
-              language=[[language]]
-              address={{item.contactInfo.address}}
-              phone-number={{item.contactInfo.phoneNumber}}
-              email={{item.contactInfo.email}}
-              fax={{item.contactInfo.fax}}
-            ></hc-contact-info>
-          </template>
+    <iron-list id="coolStuff" items="[[items]]" target="document">
+      <template>
+        <div
+          tabindex$="[[tabIndex]]"
+          class=title
+          id$=overlay-title-[[index]]
+          on-click=_toggleOverlay>
+          [[item.name]]
         </div>
-      </iron-collapse>
-    </template>
+        <iron-collapse id$=overlay-[[index]]>
+          <div class=dropdown-content no-overlap>
+            <template
+              is=dom-if
+              if=[[!hideContactInfo]]>
+              <hc-contact-info
+                language=[[language]]
+                address={{item.contactInfo.address}}
+                phone-number={{item.contactInfo.phoneNumber}}
+                email={{item.contactInfo.email}}
+                fax={{item.contactInfo.fax}}
+              ></hc-contact-info>
+            </template>
+          </div>
+        </iron-collapse>
+      </template>
+    </iron-list>
   </template>
   <script>
     Polymer({
@@ -64,6 +69,12 @@
           notify: true,
           computed: '_dirtyCheck(items.*)'
         }
+      },
+      ready() {
+        Polymer.RenderStatus.afterNextRender(() => {
+
+            this.$.coolStuff.notifyResize();
+        })
       },
       _dirtyCheck(changeRecord) {
         console.log(changeRecord, changeRecord.path !== 'items');
