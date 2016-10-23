@@ -1,6 +1,6 @@
 var router = require('express').Router(),
 voice = require('../services/voice');
-weight = require('./weights');
+weight = require('../services/weights');
 router.post('/:index(\\d+)?', voice.question);
 router.post('/finish', voice.finishUp);
 router.get('/web', voice.listQuestions);
