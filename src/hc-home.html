@@ -1,5 +1,6 @@
 <link rel=import href=../bower_components/polymer/polymer.html>
 <link rel=import href=shared-styles.html>
+<link rel=import href=elements/hc-services-list.html>
 
 <dom-module id=hc-home>
   <template>
@@ -11,11 +12,19 @@
 
     <div class=card>
       <h1>Home</h1>
+      <hc-services-list
+        base-url=[[baseUrl]]
+        headers={{headers}}
+      ></hc-services-list>
     </div>
   </template>
   <script>
     Polymer({
-      is: 'hc-home'
+      is: 'hc-home',
+      properties: {
+        baseUrl: String,
+        headers: Object
+      }
     });
   </script>
 </dom-module>
